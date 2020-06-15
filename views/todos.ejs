@@ -1,0 +1,10 @@
+<%- include('header', {title:'Việc cần làm'}); -%>
+<ul>
+    <% todos.forEach(function (t){ %>
+    <li>
+        <%= t.name %>
+        <a class="btn btn-success" href="/todos/<%= t.id %>/done" role="button">Đã xong</a>
+    </li>
+    <% }); %>
+</ul>
+<%- include('footer'); -%>

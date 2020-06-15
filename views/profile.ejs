@@ -1,0 +1,15 @@
+<%- include('header', {title:'Thông tin cá nhân'}); -%>
+<ul>
+    <li><strong>ID</strong>: <%=currentUser.id %></li>
+    <li><strong>Email</strong>: <%= currentUser.email %></li>
+    <li><strong>Tên hiển thị</strong>: <%=currentUser.displayName %></li>
+</ul>
+
+<form method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="avatar">Hình đại diện</label>
+      <input type="file" class="form-control-file" id="avatar" name="avatar">
+    </div>
+    <button type="submit" class="btn btn-primary">Đăng hình đại diện</button>
+  </form>
+<%- include('footer'); -%>
