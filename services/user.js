@@ -39,7 +39,23 @@ User.init({
         type: Sequelize.STRING,
         allowNull: false,
     },
-    token: {
+    SDT: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    paper_type: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    paper_number: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    date_of_issue: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    OTP: {
         type: Sequelize.STRING,
     },
 }, {
