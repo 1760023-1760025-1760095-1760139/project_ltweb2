@@ -1,14 +1,8 @@
 {
-  "name": "1760025",
+  "name": "doan_ltw2_2020",
   "version": "1.0.0",
+  "description": "",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "crawl": "node crawler.js"
-  },
-  "author": "dao to <daoto990611@gmail.com>",
-  "license": "MIT",
   "dependencies": {
     "bcrypt": "^4.0.1",
     "bluebird": "^3.7.2",
@@ -27,5 +21,10 @@
     "sequelize": "^5.21.13"
   },
   "devDependencies": {},
-  "description": ""
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "hoang dai <hndai.17ck1@gmail.com>",
+  "license": "MIT"
 }

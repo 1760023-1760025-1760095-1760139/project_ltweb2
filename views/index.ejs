@@ -1,6 +1,0 @@
-
-<%- include('header', {title:'Trang chủ'}); -%>
-
-    <p>Xin chào <%= currentUser ? (currentUser.token ? 'bạn cần kích hoạt tài khoản!' : currentUser.displayName): 'Khách' %></p>
-
-<%- include('footer'); -%>
