@@ -27,7 +27,7 @@ Purchase:
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.css"></script>
     <script>
         $(document).ready(function(){
-            $("#meSignup").modal('show');
+            $("#meLogin").modal('show');
         });
     </script>
 </head>
@@ -81,7 +81,7 @@ Purchase:
                     <div class="me-banner-text">
                         <h1>Money doesn't come without care</h1>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                        <a href="/" class="me-btn">Learn more</a>
+                        <a href="javascript:;" class="me-btn">Learn more</a>
                     </div>
                 </div>
                 <div class="me-banner-icon">
@@ -261,46 +261,39 @@ Purchase:
         <span>EUR/JPY -0.66775%</span>
     </p>
 </div>
-<!-- Signup Modal -->
-<div class="modal fade me-login-model" id="meSignup">
+<!-- Login Modal -->
+<div class="modal fade me-login-model" id="meLogin">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <button type="button" class="close me-team-close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
             </button>
             <div class="modal-body">
-                <h1 class="me-login-title">Sign Up</h1>
-                <form action="/register" method="post">
+                <h1 class="me-login-title">Login</h1>
+                <form action="/" method="POST">
                     <div class="me-login-form">
-                        <li>Displayname</li>
-                        <input type="text" placeholder="VD: HOANG NGUYEN DAI" id="displayname" name="displayname"/>
-                        <li>Email</li>
-                        <input type="text" placeholder="asd@gmail.com" id="email" name="email"/>
-                        <li>Password</li>
-                        <input type="password" placeholder="ki tu 8 -> 50" id="password" name="password"/>
-                        <li>Confirm Password</li>
-                        <input type="password" placeholder="ki tu 8 -> 50" id="confirm_password" name="confirm_password"/>
-                        <li>Bank</li>
-                        <input type="text" placeholder="VD: ACB" id="code" name="code"/>
-                        <li>SDT</li>
-                        <input type="text" placeholder="10 ki tu" id="sdt" name="sdt"/>
-                        <li>Paper type</li>
-                              <input type="file" class="form-date" id="paper_type" name="paper_type">
-                        <li>Paper Number</li>
-                        <input type="text" placeholder="ki tu 8 -> 20" id="paper_number" name="paper_number"/>
-                        <li>date of issue</li>
-                        <input type="date" placeholder="date of issue" id="date_of_issue" name="date_of_issue"/>
+                        <li >Username</li>
+                        <input type="text" placeholder="VD: asd@gmail.com" id="email" name="email"/>
+                        <li >Password</li>
+                        <input type="password" placeholder="Password" id="password" name="password"/>
+                        <div class="me-remember">
+                            <label>Remember Me
+                                <input type="checkbox">
+                                <span class="s_checkbox"></span>
+                            </label>
+                            <a href="/forgot" >Forgot Password ?</a>
+                        </div>
                         <div class="form-group">
                             <% if(errors || errors.length){ %>
                             <% errors.forEach(item=>{%>
                             <%- `<p style="color:red">* ${item.msg}</p>`  %>
                             <%})%>
                             <%}%>
-                        </div>                      
-                        <div class="me-transaction-load-more">
-                            <button class="me-btn">OK</button>
                         </div>
-                        <span>Bank link: VPBank, ABBank, ACB, Agribank, Dong A Bank, HDBank, OCB, BIDV, Nam A Bank, Sacombank, Saigonbank</span>
+                        <div class="me-login-btn">
+                            <button class="me-btn">Login</button>
+                            <p>Don't have an account? <a href="/register" >Sign up</a></p>
+                        </div>
                     </div>
                 </form>
                 <div class="me-login-with-social">

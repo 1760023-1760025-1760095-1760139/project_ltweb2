@@ -27,7 +27,7 @@ Purchase:
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.css"></script>
     <script>
         $(document).ready(function(){
-            $("#meUpdatePassword").modal('show');
+            $("#meforgot").modal('show');
         });
     </script>
 </head>
@@ -67,15 +67,7 @@ Purchase:
                 </div>
                 <div class="col-sm-9 col-5">
                     <div class="me-menu">
-                        <ul>
-                            <li><a href="/">Home</a></li>
-                        </ul>
-                        <div class="me-toggle-nav">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                        <a href="javascript:;" class="me-login-menu" data-toggle="modal" data-target="#meLogin">Login</a>
+                        <a href="/" >Login</a>
                     </div>
                 </div>
             </div>
@@ -89,7 +81,7 @@ Purchase:
                     <div class="me-banner-text">
                         <h1>Money doesn't come without care</h1>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                        <a href="javascript:;" class="me-btn">Learn more</a>
+                        <a href="/" class="me-btn">Learn more</a>
                     </div>
                 </div>
                 <div class="me-banner-icon">
@@ -181,4 +173,142 @@ Purchase:
             </div>
         </div>
     </div>
-    <%- include('footer'); -%>
+<!-- Footer -->
+<div class="me-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="me-footer-block">
+                    <div class="me-logo">
+                        <a href="/"><img src="assets/images/logo.svg" alt="logo" class="img-fluid"/></a>
+                    </div>
+                    <ul>
+                        <li class="me-footer-emial">peace.banking.17ck1@gmail.com</li>
+                        <li>+11-789-6542-852</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="me-footer-block">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="javascript:;">Duis aute irure</a></li>
+                        <li><a href="javascript:;">voluptate velit</a></li>
+                        <li><a href="javascript:;">cupidatat non</a></li>
+                        <li><a href="javascript:;">Excepteur</a></li>
+                        <li><a href="javascript:;">sunt in culpa</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="me-footer-block">
+                    <h4>About us</h4>
+                    <ul>
+                        <li><a href="javascript:;">aute irure</a></li>
+                        <li><a href="javascript:;">voluptate velit</a></li>
+                        <li><a href="javascript:;">cupidatat</a></li>
+                        <li><a href="javascript:;">Excepteur</a></li>
+                        <li><a href="javascript:;">sunt culpa</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="me-footer-block">
+                    <h4>Address</h4>
+                    <ul>
+                        <li>Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016</li>
+                    </ul>
+                    <ul class="me-footer-share">
+                        <li><a href="javascript:;"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-linkedin-in"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-pinterest-p"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Copyright Footer -->
+<div class="me-footer-copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="me-copyright-block">
+                    <p>&copy; 2020 copyright all right reserved by <a href="/">trade coin</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Rate -->
+<div id="me-rate">
+    <p>
+        <span>EUR/USD -0.54559%</span>
+        <span>USD/JPY -0.12283%</span>
+        <span>GBP/USD -0.44243%</span>
+        <span>USD/CHF +0.15403%</span>
+        <span>USD/CAD +0.03873%</span>
+        <span>EUR/JPY -0.66775%</span>
+        <span>AUD/USD -0.59356%</span>
+        <span>CNY/USD +0.10728%</span>
+        <span>EUR/USD -0.54559%</span>
+        <span>USD/JPY -0.12283%</span>
+        <span>GBP/USD -0.44243%</span>
+        <span>USD/CHF +0.15403%</span>
+        <span>USD/CAD +0.03873%</span>
+        <span>EUR/JPY -0.66775%</span>
+    </p>
+</div>
+<!-- Forgot Modal -->
+<div class="modal fade me-login-model" id="meforgot">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="close me-team-close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <div class="modal-body">
+                <h1 class="me-login-title">Forgot</h1>
+                <form action="/forgot" method="post">
+                    <div class="me-login-form">
+                        <li >Email</li>
+                        <input type="text" placeholder="VD: asd@gmail.com" id="email" name="email" />
+                        <div class="form-group">
+                            <% if(errors || errors.length){ %>
+                            <% errors.forEach(item=>{%>
+                            <%- `<p style="color:red">* ${item.msg}</p>`  %>
+                            <%})%>
+                            <%}%>
+                        </div>
+                        <div class="me-login-btn">
+                            <button class="me-btn">OK</button>
+                            <p>Don't have an account? <a href="/register" >Sign up</a></p>
+                        </div>
+                    </div>
+                </form>
+                <div class="me-login-with-social">
+                    <span>or</span>
+                    <p>Login with another account</p>
+                    <ul>
+                        <li><a href="javascript:;"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-linkedin-in"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-pinterest-p"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/swiper.min.js"></script>
+<script src="assets/js/SmoothScroll.min.js"></script>
+<script src="assets/js/ui_range_slider.js"></script>
+<script src="assets/js/canvasjs.js"></script>
+<script src="assets/js/custom.js"></script>
+</body>
+</html>

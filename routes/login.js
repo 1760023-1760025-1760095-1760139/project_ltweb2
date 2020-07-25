@@ -1,40 +1,64 @@
 const {Router}=require('express');
 const User=require('../services/user');
 const asyncHandler=require('express-async-handler');
+const { body, validationResult } = require('express-validator');
 
 const router = new Router();
 
-router.get('/', function (req,res){
-    res.render('home');
-});
-
-router.get('/home', function (req,res){
-    res.render('home');
-});
-
-router.get('/login', function (req,res){
-    res.render('login');
-});
-
-router.post('/login',asyncHandler(async function (req,res){
-    const user = await User.findByEmail(req.body.email);
-    //k tìm thấy user hoặc mật khẩu thì hiển thị lại trang login
-    if(!user || !User.verifyPassword(req.body.password,user.password)){
-        return res.render('home');
+var errors = [];
+router.get('/', asyncHandler(async function (req,res){
+    const user= await User.findById(req.session.userId)
+    if(req.session.userId){
+        if(user.staff==true){
+            return res.redirect('/staff');
+        }
+        return res.redirect('/customer');
     }
-    req.session.userId=user.id;
-    res.redirect('/customer');
+    else {
+        return res.render('login',{errors});
+    }
 }));
 
-router.get('/:id/:OTP',asyncHandler(async function (req,res){
-    const{id,OTP}=req.params;
-    const user=await User.findById(id);
-    if(user && user.OTP === OTP){
-        user.OTP=null;
-        user.save();
-        req.session.userId=user.id;
+router.post('/',[
+    body('email')
+        .notEmpty().withMessage('Khong duoc de trong Email!!!')
+        .isEmail().withMessage('Email not verified!!!')//dữ liệu nhập vào có phải là email hay k
+        .normalizeEmail()
+        .custom(async function(email){
+            const found=await User.findByEmail(email);
+            if(!found){
+                throw Error('Wrong Email!!!"');
+            }
+            return true;
+        }),
+    body('password')
+        .trim()//khi load lại nó sẽ làm ms
+        .notEmpty().withMessage('Khong duoc de trong Password!!!')//k dc trống
+        .isLength({min:6,max:50}).withMessage('Ki tu Password 6->50!!!'),
+],asyncHandler(async function (req,res){
+    errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        errors = errors.array();
+        return res.render('login', {errors});
     }
-    res.redirect('/customer');
+    errors = [];
+    const user = await User.findByEmail(req.body.email);
+
+    if(!User.verifyPassword(req.body.password,user.password)){
+        errors = [{ msg: "Wrong Password!!!" }];
+        return res.render('login', { errors });
+    }
+    if(user.lock==true){
+        return res.render('login_locked_account');
+    }
+    if(user.OTP!=null){
+        return res.render('login_not_activated');
+    }
+    req.session.userId=user.id;
+    if(user.staff==true){
+        return res.redirect('/staff');
+    }
+    return res.redirect('/customer');
 }));
 
 module.exports = router;

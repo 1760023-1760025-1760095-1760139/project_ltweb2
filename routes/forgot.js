@@ -7,50 +7,48 @@ const Email=require('../services/email');
 
 const router = new Router();
 
-router.get('/OTP_forgot', function (req,res){
-    res.render('OTP_forgot');
-});
+var errors=[];
 
-router.get('/update_forgot', function (req,res){
-    res.render('update_forgot');
-});
-
-router.get('/OTP_forgot_err', function (req,res){
-    res.render('OTP_forgot_err');
-});
-
-router.post('/forgot',asyncHandler(async function (req,res){
-    const user = await User.findByEmail(req.body.email);
-    if(!user){
-        res.render('forgot_err')
+router.get('/', asyncHandler(async function (req,res){
+    const user= await User.findById(req.session.userId)
+    if(req.session.userId){
+        if(user.staff==true){
+            return res.redirect('/staff');
+        }
+        return res.redirect('/customer');
     }
+    else {
+        return res.render('forgot',{errors});
+    }
+}));
+
+router.post('/',[
+    body('email')
+        .notEmpty().withMessage('Khong duoc de trong Email!!!')
+        .isEmail().withMessage('Email not verified!!!')//dữ liệu nhập vào có phải là email hay k
+        .normalizeEmail()
+        .custom(async function(email){
+            const found=await User.findByEmail(email);
+            if(!found){
+                throw Error('Wrong Email!!!"');
+            }
+            return true;
+        }),
+],asyncHandler(async function (req,res){
+    errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        errors = errors.array();
+        return res.render('forgot', {errors});
+    }
+    errors = [];
+    const user = await User.findByEmail(req.body.email);
     user.forgot=crypto.randomBytes(3).toString('hex').toUpperCase(),
     user.save();
 
     await Email.send(user.email,'Mã OTP: ',`${user.forgot}`);
-    req.session.email=user.email;
-    res.redirect('OTP_forgot');
-}));
 
-router.post('/OTP_forgot',asyncHandler(async function (req,res){
-    const user = await User.findByEmail(req.session.email);
-    //k tìm thấy user hoặc mật khẩu thì hiển thị lại trang login
-    if(user && (req.body.OTP===user.forgot)){
-        user.forgot=null;
-        user.save();
-        return res.redirect('update_forgot');
-    }
-    delete req.session.email;
-    res.redirect('/OTP_forgot_err');
-}));
-
-router.post('/update_forgot',asyncHandler(async function (req,res){
-    const user = await User.findByEmail(req.session.email);
-    user.password = User.hashPassword(req.body.password),
-    user.save();
-
-    delete req.session.email;
-    res.render('home');
+    req.session.email=req.body.email;
+    return res.redirect('/forgot_OTP')
 }));
 
 module.exports = router;

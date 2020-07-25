@@ -3,60 +3,95 @@ const { body, validationResult } = require('express-validator');
 const asyncHandler=require('express-async-handler');
 const crypto=require('crypto');
 const User=require('../services/user');
+const Account=require('../services/account');
+const Bank=require('../services/bank');
 const Email=require('../services/email');
+
+const path = require('path');
+var multer = require('multer')
+var upload = multer({ dest: path.join(__dirname, '..', 'uploads') })
 
 const router = new Router();
 
-router.get('/register', function (req,res){
-    res.render('register');
-});
+var errors=[];
+router.get('/', asyncHandler(async function (req,res){
+    const user= await User.findById(req.session.userId)
+    if(req.session.userId){
+        if(user.staff==true){
+            return res.redirect('/staff');
+        }
+        return res.redirect('/customer');
+    }
+    else {
+        return res.render('register',{errors});
+    }
+}));
 
-router.post('/register',[    
+router.post('/',[    
     body('displayname')
         .trim()//khi load lại nó sẽ làm ms
-        .notEmpty(),//k dc trống
+        .notEmpty().withMessage('Khong duoc de trong Displayname!!!'),//k dc trống
     body('email')
-        .isEmail()//dữ liệu nhập vào có phải là email hay k
+        .notEmpty().withMessage('Khong duoc de trong Email!!!')
+        .isEmail().withMessage('Email not verified!!!')//dữ liệu nhập vào có phải là email hay k
         .normalizeEmail()
         .custom(async function(email){
             const found=await User.findByEmail(email);
             if(found){
-                throw Error('User exists');
+                throw Error('Email already exists!!!');
             }
             return true;
         }),
     body('password')
         .trim()//khi load lại nó sẽ làm ms
-        .notEmpty()//k dc trống
-        .isLength({min:6,max:50}),
+        .notEmpty().withMessage('Khong duoc de trong Password!!!')//k dc trống
+        .isLength({min:6,max:50}).withMessage('Password Ki tu 6->50!!!'),
     body('confirm_password')
         .trim()//khi load lại nó sẽ làm ms
-        .notEmpty()//k dc trống
-        .isLength({min:6,max:50}),
+        .notEmpty().withMessage('Khong duoc de trong Confirm Password!!!')//k dc trống
+        .custom((value, { req }) => {
+            if (value != req.body.password) {
+                throw new Error('Confirm password is wrong!!!');
+            }
+            return true;
+        }),
     body('sdt')
         .trim()//khi load lại nó sẽ làm ms
-        .notEmpty()//k dc trống
-        .isLength(10),
+        .notEmpty().withMessage('Khong duoc de trong SDT!!!')//k dc trống
+        .isLength({min:10,max:10}).withMessage('SDT Ki tu = 10!!!'),
+    body('code')
+        .trim()//khi load lại nó sẽ làm ms
+        .notEmpty().withMessage('Khong duoc de trong bank!!!')//k dc trống
+        .custom(async function(code){
+            const found=await Bank.findByCode(code);
+            if(!found){
+                throw Error('Not affiliated with this bank!!!');
+            }
+            return true;
+        }),
     body('paper_type')
         .trim()//khi load lại nó sẽ làm ms
-        .notEmpty(),//k dc trống
+        .notEmpty().withMessage('Khong duoc de trong Paper Type!!!'),//k dc trống
     body('paper_number')
         .trim()//khi load lại nó sẽ làm ms
-        .notEmpty()//k dc trống
-        .isLength({min:8,max:20}),
+        .notEmpty().withMessage('Khong duoc de trong Paper Number!!!')//k dc trống
+        .isLength({min:8,max:20}).withMessage('Paper Number Ki tu 8->20!!!'),
     body('date_of_issue')
         .trim()//khi load lại nó sẽ làm ms
-        .notEmpty()//k dc trống
+        .notEmpty().withMessage('Khong duoc de trong Date Of Issue!!!'),//k dc trống
 
 ],asyncHandler(async function (req,res){
-    const errors = validationResult(req);
-    if (!errors.isEmpty()||(req.body.password!=req.body.confirm_password)) {
-        return res.status(422).render( 'home', {errors: errors.array() });
+    errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        errors = errors.array();
+        return res.render('register', {errors});
     }
+    errors = [];
     const user=await User.create({
         email:req.body.email,
-        displayName: req.body.displayname,
+        displayName: (req.body.displayname).toUpperCase(),
         password: User.hashPassword(req.body.password),
+        bank:req.body.code,
         SDT:req.body.sdt,
         paper_type:req.body.paper_type,
         paper_number:req.body.paper_number,
@@ -64,12 +99,14 @@ router.post('/register',[
         OTP: crypto.randomBytes(3).toString('hex').toUpperCase(),
     });
 
+    await Account.create({
+        id:user.id,
+        email:user.email,
+        money:0,
+        money_save:0,
+    })
+
     await Email.send(user.email,'Mã kích hoạt tài khoản',`http://localhost:3000/${user.id}/${user.OTP}`); //khi chạy trên cmd gõ BASE_URL= http://locahost:3000 mình dùng trc start npm
-    res.render('not_activated');
+    return res.render('login_not_activated');
 }));
-
-
-
-
-
 module.exports = router;

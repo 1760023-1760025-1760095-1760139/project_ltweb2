@@ -1,18 +1,17 @@
-const User =require('../services/user');
+const Bank=require('../services/bank');
 const asyncHandler=require('express-async-handler');
 
 module.exports= asyncHandler(async function auth(req,res,next){
     const userId=req.session.userId;
-    res.locals.currentUser=null;
+    res.locals.currentBank=null;
     if(!userId){
         return next();
     }
-    const user= await User.findById(userId);
-    if(!user){
+    const bank= await Bank.findById(userId);
+    if(!bank){
         return next();
     }
-
-    req.currentUser=user;
-    res.locals.currentUser=user;
+    req.currentBank=bank;
+    res.locals.currentBank=bank;
     next();
 });

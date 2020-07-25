@@ -97,7 +97,9 @@
                 <h1 class="me-login-title">Login</h1>
                 <form action="/login" method="POST">
                     <div class="me-login-form">
-                        <input type="text" placeholder="Username" id="email" name="email"/>
+                        <label for="email">Username</label>
+                        <input type="text" placeholder="VD: asd@gmail.com" id="email" name="email"/>
+                        <label for="password">Password</label>
                         <input type="password" placeholder="Password" id="password" name="password"/>
                         <div class="me-remember">
                             <label>Remember Me
@@ -107,6 +109,13 @@
                             <a href="javascript:;" class="me-forgot-password" data-toggle="modal" data-target="#meforgot" data-dismiss="modal" aria-label="Close" >Forgot Password ?</a>
                         </div>
                         <div class="me-login-btn">
+                            <div class="form-group">
+                                <% if(errors || errors.length){ %>
+                                <% errors.forEach(item=>{%>
+                                <%- `<p style="color:red">* ${item.msg}</p>`  %>
+                                <%})%>
+                                <%}%>
+                            </div>
                             <button class="me-btn">Login</button>
                             <p>Don't have an account? <a href="/register" >Sign up</a></p>
                         </div>
@@ -142,11 +151,12 @@
                         <input type="text" placeholder="Email" id="email" name="email"/>
                         <input type="password" placeholder="Password" id="password" name="password"/>
                         <input type="password" placeholder="Confirm Password" id="confirm_password" name="confirm_password"/>
+                        <input type="text" placeholder="Bank" id="bank" name="bank"/>
                         <input type="text" placeholder="SDT" id="sdt" name="sdt"/>
                         <li>Paper type</li>
-                              <input type="file" class="form-control-file" id="paper_type" name="paper_type">
+                              <input type="file" class="form-date" id="paper_type" name="paper_type">
                         <input type="text" placeholder="Paper Number" id="paper_number" name="paper_number"/>
-                        <input type="text" placeholder="date of issue" id="date_of_issue" name="date_of_issue"/>                        
+                        <input type="date" placeholder="date of issue" id="date_of_issue" name="date_of_issue"/>                        
                         <div class="me-transaction-load-more">
                             <button class="me-btn">Sign up</button>
                         </div>

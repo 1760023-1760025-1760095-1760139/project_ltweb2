@@ -4,28 +4,37 @@ const Sequelize=require('sequelize');
 
 const Model=Sequelize.Model;
 
-class User extends Model {
+class User_Update extends Model {
     static async findById(id){
-        return User.findByPk(id);
-    }
+        return User_Update.findOne({
+            where: {
+                id,
+            }
+        });
+    };
+
+    static async deleteById(id){
+        return User_Update.destroy({
+            where:{
+                id,
+            }
+        });
+    };
 
     static async findByEmail(email){
-        return User.findOne({
+        return User_Update.findOne({
             where: {
                 email,
             }
         });
-    }
+    };
 
     static hashPassword(password){
         return bcrypt.hashSync(password,10);
     }
-
-    static verifyPassword(password,passwordHash){
-        return bcrypt.compareSync(password,passwordHash);
-    }
- }
-User.init({
+ };
+ 
+ User_Update.init({
     email:{
         type: Sequelize.STRING,
         allowNull: false,
@@ -35,43 +44,33 @@ User.init({
         type: Sequelize.STRING,
         allowNull: false,
     },
-    password:{
+    SDT: {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    SDT: {
-        type: Sequelize.STRING,
-    },
     paper_type: {
         type: Sequelize.STRING,
+        allowNull: false,
     },
     paper_number: {
         type: Sequelize.STRING,
+        allowNull: false,
     },
     date_of_issue: {
         type: Sequelize.DATE,
-    },
-    bank: {
-        type: Sequelize.STRING,
+        allowNull: false,
     },
     OTP: {
         type: Sequelize.STRING,
     },
-    forgot: {
-        type: Sequelize.STRING,
-    },
-    lock: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-    },
-    staff: {
+    check:{
         type: Sequelize.BOOLEAN,
         defaultValue: false,
     },
 }, {
     sequelize: db,
-    modelName:'user',
+    modelName:'user_update',
 });
 
 
-module.exports= User;
+module.exports= User_Update;
