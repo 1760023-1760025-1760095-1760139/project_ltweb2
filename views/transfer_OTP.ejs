@@ -23,6 +23,13 @@ Purchase:
     <link rel="stylesheet" type="text/css" href="assets/css/swiper.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link rel="icon" type="image/png" href="assets/images/fav.png"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.css"></script>
+    <script>
+        $(document).ready(function(){
+            $("#meOTP").modal('show');
+        });
+    </script>
 </head>
 <body>
 <div class="me-main-wraper">
@@ -84,9 +91,6 @@ Purchase:
                         <div class="me-my-profile-head">
                             <div class="me-profile-name">
                                 <h4>My profile : <%=currentUser.displayName %></h4>
-                                <div class="me-profile-data">
-                                    <p><%=currentBank.Name %></p>
-                                </div>
                             </div>
                             <div class="me-my-profile-img">
                                 <div class="me-my-profile-img-main">
@@ -143,24 +147,32 @@ Purchase:
                                     <div class="me-profile-data">
                                         <p><%=currentUser.email %></p>
                                     </div>
-                                </li>                               
-                                <li>
-                                    <div class="me-profile-data">
-                                        <p>Birthday</p>
-                                    </div>
-                                    <div class="me-profile-data">
-                                        <p><%=currentUser.birthday %></p>
-                                    </div>
                                 </li>
                                 <li>
                                     <div class="me-profile-data">
                                         <p>SDT</p>
                                     </div>
                                     <div class="me-profile-data">
-                                        <p>+84 <%=currentUser.SDT %></p>
+                                        <p><%=currentUser.SDT %></p>
                                     </div>
                                 </li>
-                                <li><a class="me-btn" href="/customer_update_user">Change Password</a></li>
+                                <li>
+                                    <div class="me-profile-data">
+                                        <p>Tên NH</p>
+                                    </div>
+                                    <div class="me-profile-data">
+                                        <p>VPBank - NH Viet Nam Thinh Vuong (VPBank) (chua lam???)</p>
+                                    </div>
+                                </li>                                
+                                <li>
+                                    <div class="me-profile-data">
+                                        <p>Date of issue</p>
+                                    </div>
+                                    <div class="me-profile-data">
+                                        <p><%=currentUser.date_of_issue %></p>
+                                    </div>
+                                </li>
+                                <li><button class="me-btn" data-toggle="modal" data-target="#meUpdate">Update</button></li>
                             </ul>
                         </div>
                     </div>
@@ -258,7 +270,7 @@ Purchase:
         <div class="row">
             <div class="col-lg-6">
                 <div class="me-copyright-block">
-                    <p>&copy; 2020 copyright all right reserved by <a href="/customer">trade coin</a></p>
+                    <p>&copy; 2020 copyright all right reserved by <a href="javascript:;">trade coin</a></p>
                 </div>
             </div>
         </div>
@@ -282,6 +294,34 @@ Purchase:
         <span>USD/CAD +0.03873%</span>
         <span>EUR/JPY -0.66775%</span>
     </p>
+</div>
+<!--OTP-->
+<div class="modal fade me-login-model" id="meOTP">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="close me-team-close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <div class="modal-body">
+                <h1 class="me-login-title">OTP</h1>
+                <form action="/transfer_OTP" method="post">
+                    <div class="me-login-form">
+                        <input type="text" placeholder="OTP" id="OTP" name="OTP"/>  
+                        <div class="form-group">
+                            <% if(errors || errors.length){ %>
+                            <% errors.forEach(item=>{%>
+                            <%- `<p style="color:red">* ${item.msg}</p>`  %>
+                            <%})%>
+                            <%}%>
+                        </div>                      
+                        <button class="me-btn">Ok</button>
+                    </div>
+                </form>
+                <div class="me-login-with-social">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 <script src="assets/js/jquery.min.js"></script>

@@ -1,6 +1,7 @@
 const {Router}=require('express');
 const asyncHandler=require('express-async-handler');
 const User=require('../services/user');
+const Sequelize=require('sequelize');
 const router = new Router();
 
 router.get('/customer',asyncHandler(async function (req,res){
@@ -14,6 +15,7 @@ router.get('/customer',asyncHandler(async function (req,res){
     else {
         return res.redirect('/');
     }
+    
 }));
 
 module.exports = router;

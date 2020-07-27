@@ -7,7 +7,7 @@ const router = new Router();
 
 var errors = [];
 router.get('/', asyncHandler(async function (req,res){
-    const user= await User.findById(req.session.userId)
+    const user= await User.findById(req.session.userId);
     if(req.session.userId){
         if(user.staff==true){
             return res.redirect('/staff');

@@ -18,6 +18,6 @@ async function send(to_,subject_,content){
         subject: subject_,
         text: content,
     });
-}
+};
 
 module.exports={send};

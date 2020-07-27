@@ -24,7 +24,7 @@ class User extends Model {
     static verifyPassword(password,passwordHash){
         return bcrypt.compareSync(password,passwordHash);
     }
- }
+ };
 User.init({
     email:{
         type: Sequelize.STRING,
@@ -40,15 +40,15 @@ User.init({
         allowNull: false,
     },
     SDT: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
     },
     paper_type: {
         type: Sequelize.STRING,
     },
     paper_number: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
     },
-    date_of_issue: {
+    birthday: {
         type: Sequelize.DATE,
     },
     bank: {

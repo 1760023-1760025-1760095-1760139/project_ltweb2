@@ -274,6 +274,8 @@ Purchase:
                     <div class="me-login-form">
                         <li>Displayname</li>
                         <input type="text" placeholder="VD: HOANG NGUYEN DAI" id="displayname" name="displayname"/>
+                        <li>Birthday</li>
+                        <input type="date" placeholder="date of issue" id="birthday" name="birthday"/>
                         <li>Email</li>
                         <input type="text" placeholder="asd@gmail.com" id="email" name="email"/>
                         <li>Password</li>
@@ -281,15 +283,19 @@ Purchase:
                         <li>Confirm Password</li>
                         <input type="password" placeholder="ki tu 8 -> 50" id="confirm_password" name="confirm_password"/>
                         <li>Bank</li>
-                        <input type="text" placeholder="VD: ACB" id="code" name="code"/>
+                        <select class="me-btn" id="code" name="code">
+                            <% if(bank){ %>
+                            <% bank.forEach(x=>{%>
+                            <%- `<option>${x.code}</option>`  %>
+                            <%})%>
+                            <%}%>
+                        </select>
                         <li>SDT</li>
-                        <input type="text" placeholder="10 ki tu" id="sdt" name="sdt"/>
+                        <input type="number" placeholder="10 ki tu" id="sdt" name="sdt"/>
                         <li>Paper type</li>
                               <input type="file" class="form-date" id="paper_type" name="paper_type">
                         <li>Paper Number</li>
-                        <input type="text" placeholder="ki tu 8 -> 20" id="paper_number" name="paper_number"/>
-                        <li>date of issue</li>
-                        <input type="date" placeholder="date of issue" id="date_of_issue" name="date_of_issue"/>
+                        <input type="number" placeholder="ki tu 8 -> 20" id="paper_number" name="paper_number"/>
                         <div class="form-group">
                             <% if(errors || errors.length){ %>
                             <% errors.forEach(item=>{%>
@@ -300,7 +306,6 @@ Purchase:
                         <div class="me-transaction-load-more">
                             <button class="me-btn">OK</button>
                         </div>
-                        <span>Bank link: VPBank, ABBank, ACB, Agribank, Dong A Bank, HDBank, OCB, BIDV, Nam A Bank, Sacombank, Saigonbank</span>
                     </div>
                 </form>
                 <div class="me-login-with-social">

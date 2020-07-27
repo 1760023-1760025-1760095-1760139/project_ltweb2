@@ -11,7 +11,7 @@ class User_Update extends Model {
                 id,
             }
         });
-    };
+    }
 
     static async deleteById(id){
         return User_Update.destroy({
@@ -19,7 +19,7 @@ class User_Update extends Model {
                 id,
             }
         });
-    };
+    }
 
     static async findByEmail(email){
         return User_Update.findOne({
@@ -27,7 +27,7 @@ class User_Update extends Model {
                 email,
             }
         });
-    };
+    }
 
     static hashPassword(password){
         return bcrypt.hashSync(password,10);

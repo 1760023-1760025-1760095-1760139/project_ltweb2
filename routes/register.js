@@ -15,7 +15,8 @@ const router = new Router();
 
 var errors=[];
 router.get('/', asyncHandler(async function (req,res){
-    const user= await User.findById(req.session.userId)
+    const user= await User.findById(req.session.userId);
+    const bank= await Bank.findByAll();
     if(req.session.userId){
         if(user.staff==true){
             return res.redirect('/staff');
@@ -23,7 +24,7 @@ router.get('/', asyncHandler(async function (req,res){
         return res.redirect('/customer');
     }
     else {
-        return res.render('register',{errors});
+        return res.render('register',{errors,bank});
     }
 }));
 
@@ -59,16 +60,6 @@ router.post('/',[
         .trim()//khi load lại nó sẽ làm ms
         .notEmpty().withMessage('Khong duoc de trong SDT!!!')//k dc trống
         .isLength({min:10,max:10}).withMessage('SDT Ki tu = 10!!!'),
-    body('code')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong bank!!!')//k dc trống
-        .custom(async function(code){
-            const found=await Bank.findByCode(code);
-            if(!found){
-                throw Error('Not affiliated with this bank!!!');
-            }
-            return true;
-        }),
     body('paper_type')
         .trim()//khi load lại nó sẽ làm ms
         .notEmpty().withMessage('Khong duoc de trong Paper Type!!!'),//k dc trống
@@ -76,15 +67,16 @@ router.post('/',[
         .trim()//khi load lại nó sẽ làm ms
         .notEmpty().withMessage('Khong duoc de trong Paper Number!!!')//k dc trống
         .isLength({min:8,max:20}).withMessage('Paper Number Ki tu 8->20!!!'),
-    body('date_of_issue')
+    body('birthday')
         .trim()//khi load lại nó sẽ làm ms
         .notEmpty().withMessage('Khong duoc de trong Date Of Issue!!!'),//k dc trống
 
 ],asyncHandler(async function (req,res){
+    const bank= await Bank.findByAll();
     errors = validationResult(req);
     if (!errors.isEmpty()) {
         errors = errors.array();
-        return res.render('register', {errors});
+        return res.render('register', {errors,bank});
     }
     errors = [];
     const user=await User.create({
@@ -95,7 +87,7 @@ router.post('/',[
         SDT:req.body.sdt,
         paper_type:req.body.paper_type,
         paper_number:req.body.paper_number,
-        date_of_issue:req.body.date_of_issue,
+        birthday:req.body.birthday,
         OTP: crypto.randomBytes(3).toString('hex').toUpperCase(),
     });
 

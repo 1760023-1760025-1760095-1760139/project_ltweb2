@@ -54,12 +54,16 @@ app.use('/forgot',require('./routes/forgot'));
 app.use('/forgot_OTP',require('./routes/forgot_OTP'));
 app.use('/forgot_password',require('./routes/forgot_password'));
 
+app.use('/test',require('./routes/test'));
 
 app.get('/customer',require('./routes/customer'));
 app.use('/customer_update_user',require('./routes/customer_update_user'));
 app.use('/customer_update_user_OTP',require('./routes/customer_update_user_OTP'));
 
-app.get('/staff',require('./routes/staff'));
+app.use('/transfer',require('./routes/transfer'));
+app.use('/transfer_OTP',require('./routes/transfer_OTP'));
+
+//app.get('/staff',require('./routes/staff'));
 
 app.get('/logout',require('./routes/logout'));
 

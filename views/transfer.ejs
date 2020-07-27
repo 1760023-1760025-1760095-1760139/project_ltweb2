@@ -23,6 +23,13 @@ Purchase:
     <link rel="stylesheet" type="text/css" href="assets/css/swiper.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link rel="icon" type="image/png" href="assets/images/fav.png"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.css"></script>
+    <script>
+        $(document).ready(function(){
+            $("#meTransfer").modal('show');
+        });
+    </script>
 </head>
 <body>
 <div class="me-main-wraper">
@@ -143,24 +150,24 @@ Purchase:
                                     <div class="me-profile-data">
                                         <p><%=currentUser.email %></p>
                                     </div>
-                                </li>                               
-                                <li>
-                                    <div class="me-profile-data">
-                                        <p>Birthday</p>
-                                    </div>
-                                    <div class="me-profile-data">
-                                        <p><%=currentUser.birthday %></p>
-                                    </div>
                                 </li>
                                 <li>
                                     <div class="me-profile-data">
                                         <p>SDT</p>
                                     </div>
                                     <div class="me-profile-data">
-                                        <p>+84 <%=currentUser.SDT %></p>
+                                        <p><%=currentUser.SDT %></p>
+                                    </div>
+                                </li>                               
+                                <li>
+                                    <div class="me-profile-data">
+                                        <p>Date of issue</p>
+                                    </div>
+                                    <div class="me-profile-data">
+                                        <p><%=currentUser.date_of_issue %></p>
                                     </div>
                                 </li>
-                                <li><a class="me-btn" href="/customer_update_user">Change Password</a></li>
+                                <li><a class="me-btn" href="/customer_update_user">Update</a></li>
                             </ul>
                         </div>
                     </div>
@@ -179,7 +186,7 @@ Purchase:
                                         <p>Account</p>
                                         <p><strong><%=currentAccount.money %> VND</strong></p>
                                     </div>
-                                    <a class="me-btn" href="/transfer">Transfer</a>
+                                    <a class="me-btn" data-toggle="modal" data-target="#meTransfer">Transfer</a>
                                 </li>
                                 <li>
                                     <div class="me-summary-data">
@@ -282,6 +289,66 @@ Purchase:
         <span>USD/CAD +0.03873%</span>
         <span>EUR/JPY -0.66775%</span>
     </p>
+</div>
+<!-- Transfer Modal -->
+<div class="modal fade me-login-model" id="meTransfer">
+    <div class="me-banner-two-coin">
+        <img src="assets/images/coins.png" alt="image" class="img-fluid">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="close me-team-close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <div class="modal-body">
+                <h1 class="me-login-title">Transfer</h1>
+                <form action="/transfer" method="post">
+                    <div class="me-login-form">
+                        <li>Bank</li>
+                        <select class="me-btn" id="code" name="code">
+                            <% if(bank){ %>
+                            <% bank.forEach(x=>{%>
+                            <%- `<option>${x.code}</option>`  %>
+                            <%})%>
+                            <%}%>
+                        </select>
+                        <li>STK</li>
+                        <input type="number" id="STK" name="STK"/>
+                        <li>Displayname</li>
+                        <input type="text" placeholder="VD: HOANG NGUYEN DAI" id="displayname" name="displayname"/>
+                        <li>Money</li>
+                        <input type="number" placeholder="VND" id="money" name="money"/>
+                        <li>Description</li>
+                        <input type="text" id="description" name="description"/>  
+                        <div class="form-group">
+                            <% if(errors || errors.length){ %>
+                            <% errors.forEach(item=>{%>
+                            <%- `<p style="color:red">* ${item.msg}</p>`  %>
+                            <%})%>
+                            <%}%>
+                        </div>                   
+                        <button class="me-btn">OK</button>                   
+                    </div>
+                </form>
+                <div class="me-login-with-social">
+                    <span>or</span>
+                    <p>Login with another account</p>
+                    <ul>
+                        <li><a href="javascript:;"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-linkedin-in"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-pinterest-p"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 <script src="assets/js/jquery.min.js"></script>
