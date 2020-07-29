@@ -79,15 +79,15 @@ Purchase:
     <div class="me-transaction me-padder-top-less me-padder-bottom">
         <div class="container">
             <div class="me-heading2">
-                <%- `<h4>${bank_acc.Name}</h4>`  %>
-                <h1>Customer information</h1>
+                <%- `<h4>${bank.Name}</h4>`  %>
+                <h1>Customer transaction information</h1>
             </div>
-            <div class="me-menu" >
-                <form action="/staff_find" method="post">
-                    <input type="number" placeholder="STK" id="STK" name="STK" style="margin-left: 65%; width: 220px;"/>
+            <form action="/information" method="post">
+                <div class="me-menu" >
+                    <input type="date" id="date" name="date" style="margin-left: 65%; width: 220px;"/>
                     <button class="me-btn">OK</button>
-                </form>
-            </div>
+                </div>
+            </form >
             <div class="me-menu">
                 <% if(errors || errors.length){ %>
                 <% errors.forEach(item=>{%>
@@ -103,52 +103,17 @@ Purchase:
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>STK</th>
-                                        <th>Name</th>
-                                        <th>Status</th>
-                                        <th>Update</th>
-                                        <th>Status change</th>
-                                        <th>Accept authentication</th>
-                                        <th>Transaction notice</th>
+                                        <th>Notification</th>
+                                        <th>Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <% if(arr){ %>
                                         <% arr.forEach(x=>{%>
                                             <tr>
-                                                <%- `<td>${i}</td>`  %>
-                                                <%- `<td>${x.id}</td>`  %>
-                                                <%- `<td>${x.displayName}</td>`  %>
-                                                <td> 
-                                                    <% if((x.OTP!=null) || (x.authentication!=null) || (x.authentication_check==true)){ %>
-                                                        <%- `<li>Not authenticated</li>`  %>
-                                                        <% } %>
-                                                    <% if(x.lock!=false){ %>
-                                                        <%- `<li>Locked</li>`  %>
-                                                        <% } %>
-                                                    <% if((x.OTP==null) && (x.lock==false) && (x.authentication==null) && (x.authentication_check!=true)){ %>
-                                                        <%- `<li>Verified</li>`  %>
-                                                        <% } %>
-                                                </td>
-                                                <td><%- `<a class="me-btn" href="/update/${x.id}">Update</a>`  %></td>
-                                                <td>
-                                                    <%- `<a class="me-btn" href="/authentication/${x.id}">Authentication</a>`  %>
-                                                    <% if( x.lock!=false || x.authentication!=null || (x.authentication_check==true)){ %>
-                                                        <%- `<a class="me-btn" href="/works_again/${x.id}">Works again</a>`  %>
-                                                    <% } %>
-                                                    <% if(x.lock==false){ %>
-                                                        <%- `<a class="me-btn" href="/locked/${x.id}">Locked</a>`  %>
-                                                    <% } %>
-                                                </td>
-                                                <td>
-                                                    <% if(x.authentication_check!=false || ((x.update_password!=null) && (x.update_OTP==null)) ){ %>
-                                                        <%- `<a class="me-btn" href="/accept/${x.id}">Accept</a>`  %>
-                                                        <%- `<a class="me-btn" href="/refuse/${x.id}">Refuse</a>`  %>
-                                                    <% } %>
-                                                </td>
-                                                <td>
-                                                    <%- `<a class="me-btn" href="/information/${x.id}">Information</a>`  %>
-                                                </td>                                            
+                                            <%- `<td>${i}</td>`  %>
+                                            <%- `<td>${x.notification}</td>`  %>
+                                            <%- `<td>${x.date}</td>`  %>
                                             <%i++%>
                                             </tr>
                                         <%})%>

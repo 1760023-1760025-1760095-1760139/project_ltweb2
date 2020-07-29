@@ -15,6 +15,15 @@ router.get('/', asyncHandler(async function (req,res){
         if(user.staff==true){
             return res.redirect('/staff');
         }
+        if(user.authentication!=null){
+            req.session.id=req.session.userId;
+            delete req.session.userId;
+            return res.redirect('/login_authentication');
+        }
+        if(user.lock==true){
+            delete req.session.userId;
+            return res.redirect('login_locked_account');
+        }
         return res.redirect('/customer');
     }
     else {
@@ -41,6 +50,15 @@ router.post('/',[
         return res.render('forgot_OTP', {errors});
     }
     const user = await User.findByEmail(req.session.email);
+    if(user.authentication!=null){
+        req.session.id=req.session.userId;
+        delete req.session.userId;
+        return res.redirect('/login_authentication');
+    }
+    if(user.lock==true){
+        delete req.session.userId;
+        return res.redirect('login_locked_account');
+    }
     if(user && (req.body.OTP===user.forgot)){        
         user.forgot=null;
         user.save();

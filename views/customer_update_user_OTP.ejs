@@ -91,6 +91,9 @@ Purchase:
                         <div class="me-my-profile-head">
                             <div class="me-profile-name">
                                 <h4>My profile : <%=currentUser.displayName %></h4>
+                                <div class="me-profile-data">
+                                    <p><%=bank.Name %></p>
+                                </div>
                             </div>
                             <div class="me-my-profile-img">
                                 <div class="me-my-profile-img-main">
@@ -161,7 +164,7 @@ Purchase:
                                         <p>Tên NH</p>
                                     </div>
                                     <div class="me-profile-data">
-                                        <p>VPBank - NH Viet Nam Thinh Vuong (VPBank) (chua lam???)</p>
+                                        <p><%=bank.Name %></p>
                                     </div>
                                 </li>                                
                                 <li>
@@ -307,6 +310,8 @@ Purchase:
                 <form action="/customer_update_user_OTP" method="post">
                     <div class="me-login-form">
                         <input type="text" placeholder="OTP" id="OTP" name="OTP"/>  
+                        <li>Paper type</li>
+                              <input type="file" class="form-date" id="paper_type" name="paper_type">
                         <div class="form-group">
                             <% if(errors || errors.length){ %>
                             <% errors.forEach(item=>{%>

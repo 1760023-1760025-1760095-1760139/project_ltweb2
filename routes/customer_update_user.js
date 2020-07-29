@@ -1,22 +1,32 @@
 const {Router}=require('express');
+const bcrypt=require('bcrypt');
 const { body, validationResult } = require('express-validator');
 const asyncHandler=require('express-async-handler');
 const crypto=require('crypto');
 const User=require('../services/user');
+const Bank = require('../services/bank');
 const Email=require('../services/email');
-
-const User_Update=require('../services/user_update');
 
 const router = new Router();
 
 var errors=[];
 router.get('/',asyncHandler(async function (req,res){
     const user= await User.findById(req.session.userId)
+    const bank=await Bank.findByCode(user.bank);
     if(req.session.userId){
         if(user.staff==true){
             return res.redirect('/staff');
         }
-        return res.render('customer_update_user',{errors});
+        if(user.authentication!=null){
+            req.session.id=req.session.userId;
+            delete req.session.userId;
+            return res.redirect('/login_authentication');
+        }
+        if(user.lock==true){
+            delete req.session.userId;
+            return res.redirect('login_locked_account');
+        }
+        return res.render('customer_update_user',{errors,bank});
     }
     else {
         return res.redirect('login');
@@ -24,44 +34,55 @@ router.get('/',asyncHandler(async function (req,res){
 }));
 
 router.post('/',[    
-    body('displayname')
+    body('current_password')
         .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Displayname!!!'),//k dc trống
-    body('sdt')
+        .notEmpty().withMessage('Không được để trống Displayname!!!'),//k dc trống
+    body('password')
         .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong SDT!!!')//k dc trống
-        .isLength({min:10,max:10}).withMessage('Ki tu SDT = 10!!!'),
-    body('paper_type')
+        .notEmpty().withMessage('Không được để trống Password!!!')//k dc trống
+        .isLength({min:6,max:50}).withMessage('Password Ki tu 6->50!!!')
+        .custom((value, { req }) => {
+            if (value == req.body.current_password) {
+                throw new Error('Không được giống với current password!!!');
+            }
+            return true;
+        }),
+    body('confirm_password')
         .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Paper Type!!!'),//k dc trống
-    body('paper_number')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Paper Number!!!')//k dc trống
-        .isLength({min:8,max:20}).withMessage('Ki tu Paper Number 8->20!!!'),
-    body('date_of_issue')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Date Of Issue!!!'),//k dc trống
+        .notEmpty().withMessage('Không được để trống Confirm Password!!!')//k dc trống
+        .custom((value, { req }) => {
+            if (value != req.body.password) {
+                throw new Error('Confirm password is wrong!!!');
+            }
+            return true;
+        }),
 ],asyncHandler(async function (req,res){
     errors = validationResult(req);
+    const user= await User.findById(req.session.userId)
+    const bank=await Bank.findByCode(user.bank);
     if (!errors.isEmpty()) {
         errors = errors.array();
-        return res.render('customer_update_user', {errors});
+        return res.render('customer_update_user', {errors,bank});
+    }
+    if(user.password==bcrypt.hashSync(req.body.password,10)){
+        errors = [{ msg: "Wrong password!!!" }];
+        return res.render('customer_update_user', {errors,bank});
     }
     errors = [];
-    const user = await User.findById(req.session.userId);
-    await User_Update.deleteById(req.session.userId)
-    const update =await User_Update.create({
-        id:user.id,
-        email:user.email,
-        displayName: (req.body.displayname).toUpperCase(),
-        SDT:req.body.sdt,
-        paper_type:req.body.paper_type,
-        paper_number:req.body.paper_number,
-        date_of_issue:req.body.date_of_issue,
-        OTP: crypto.randomBytes(3).toString('hex').toUpperCase(),
-    });
+    if(user.authentication!=null){
+        req.session.id=req.session.userId;
+        delete req.session.userId;
+        return res.redirect('/login_authentication');
+    }
+    if(user.lock==true){
+        delete req.session.userId;
+        return res.redirect('login_locked_account');
+    }
+    user.update_password=User.hashPassword(req.body.password);
+    user.update_OTP = crypto.randomBytes(3).toString('hex').toUpperCase();
+    user.save()
 
-    await Email.send(update.email,'Mã OTP: ',`${update.OTP}`);
+    await Email.send(user.email,'Mã OTP: ',`${user.update_OTP}`);
     return res.redirect('customer_update_user_OTP')
 }));
 

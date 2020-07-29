@@ -15,6 +15,15 @@ router.get('/', asyncHandler(async function (req,res){
         if(user.staff==true){
             return res.redirect('/staff');
         }
+        if(user.authentication!=null){
+            req.session.id=req.session.userId;
+            delete req.session.userId;
+            return res.redirect('/login_authentication');
+        }
+        if(user.lock==true){
+            delete req.session.userId;
+            return res.redirect('login_locked_account');
+        }
         return res.redirect('/customer');
     }
     else {
@@ -42,6 +51,17 @@ router.post('/',[
     }
     errors = [];
     const user = await User.findByEmail(req.body.email);
+
+    if(user.authentication!=null){
+        req.session.id=req.session.userId;
+        delete req.session.userId;
+        return res.redirect('/login_authentication');
+    }
+    if(user.lock==true){
+        delete req.session.userId;
+        return res.redirect('login_locked_account');
+    }
+    
     user.forgot=crypto.randomBytes(3).toString('hex').toUpperCase(),
     user.save();
 

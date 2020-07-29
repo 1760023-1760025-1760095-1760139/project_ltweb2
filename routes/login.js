@@ -54,6 +54,13 @@ router.post('/',[
     if(user.OTP!=null){
         return res.render('login_not_activated');
     }
+    if(user.authentication!=null){
+        req.session.id=user.id;
+        return res.redirect('/login_authentication');
+    }
+    if(user.authentication_check==true){
+        return res.redirect('/');
+    }
     req.session.userId=user.id;
     if(user.staff==true){
         return res.redirect('/staff');

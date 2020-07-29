@@ -46,7 +46,7 @@ app.get('/:id/:OTP',require('./routes/login_OTP'));
 
 app.use(require('./middlewares/auth'));
 app.use(require('./middlewares/account'));
-app.use(require('./middlewares/bank'));
+//app.use(require('./middlewares/bank'));
 
 app.use('/register',require('./routes/register'));
 
@@ -63,7 +63,19 @@ app.use('/customer_update_user_OTP',require('./routes/customer_update_user_OTP')
 app.use('/transfer',require('./routes/transfer'));
 app.use('/transfer_OTP',require('./routes/transfer_OTP'));
 
-//app.get('/staff',require('./routes/staff'));
+app.use('/notification',require('./routes/notification'));
+
+app.use('/staff',require('./routes/staff'));
+app.use('/staff_find',require('./routes/staff_find'));
+app.use('/staff_moneyloaded',require('./routes/staff_moneyloaded'));
+
+app.use('/update',require('./routes/staff_update'));
+app.use('/authentication',require('./routes/staff_authentication'));
+app.use('/works_again',require('./routes/staff_works_again'));
+app.use('/locked',require('./routes/staff_locked'));
+app.use('/accept',require('./routes/staff_accept'));
+app.use('/refuse',require('./routes/staff_refuse'));
+app.use('/information',require('./routes/staff_information'));
 
 app.get('/logout',require('./routes/logout'));
 

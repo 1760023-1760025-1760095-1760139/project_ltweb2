@@ -10,13 +10,12 @@ var i=1;
 router.get('/',asyncHandler(async function (req,res){
     i=1;
     var staff=false;
-    delete req.session.id;
     const user= await User.findById(req.session.userId)
-    const arr= await User.findByAll_STK_Bank(user.bank,staff)
+    const x= await User.findById(req.session.id)
     const bank_acc=await Bank.findByCode(user.bank)
     if(req.session.userId){
         if(user.staff==true){
-            return res.render('staff',{errors,arr,i,bank_acc});
+            return res.render('staff_find',{errors,x,i,bank_acc});
         }
         return res.redirect('/customer');
     }
@@ -31,25 +30,23 @@ router.post('/',[
         .notEmpty().withMessage('Không được để trống STK!!!'),
 ],asyncHandler(async function (req,res){
     i=1;
-    var staff=false;
+    req.session.id=req.body.STK;
     const user= await User.findById(req.session.userId)
-    var arr= await User.findByAll_STK_Bank(user.bank,staff)
+    const x= await User.findById(req.session.id)
     const bank_acc=await Bank.findByCode(user.bank)
     errors = validationResult(req);
     if (!errors.isEmpty()) {
         errors = errors.array();
-        return res.render('staff', { errors, arr, i,bank_acc});
+        return res.redirect('/staff');
     }
     errors = [];
     i=1;
-    const user_rec=await User.findById(req.body.STK);
-    if(!user_rec|| (user_rec.bank!=user.bank) || (user_rec.staff!=false)){
+    if(!x|| (x.bank!=user.bank) || (x.staff!=false)){
         errors = [{ msg: "User information could not be found!!!" }];
-        return res.render('staff', { errors, arr, i,bank_acc});
+        return res.redirect('/staff');
     }
-    req.session.id=user_rec.id;
     
-    return res.redirect('/staff_find');
+    return res.render('staff_find', { errors, x, i,bank_acc});
 }));
 
 module.exports = router;

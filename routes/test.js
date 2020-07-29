@@ -12,7 +12,7 @@ const router = new Router();
 var errors=[];
 
 router.get('/', function (req,res){
-    return res.render('notification');
+    return res.render('test');
 });
 
 router.post('/', function (req,res){

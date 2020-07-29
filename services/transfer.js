@@ -15,10 +15,10 @@ class Transfer extends Model {
     }
 
     //hàm này tìm tất cả email của STK đó
-    static async findByEmail(email){
+    static async findByEmail(STK_acc){
         Transfer.findAll({
             where: {
-                email,
+                STK_acc,
             }
         }).then(arr => arr.forEach(temp =>{
             if(temp.OTP!=null){
@@ -31,7 +31,7 @@ class Transfer extends Model {
         }));
         return Transfer.findAll({
             where: {
-                email,
+                STK_acc,
             }
         });
     }
@@ -112,12 +112,7 @@ class Transfer extends Model {
                     })
                 }
             }));
-        if(sum<200000000){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return sum;
     }
 
     //hàm này xóa id khi ng gửi đó đã gửi quá hạn số tiền trong 1 ngày gửi
@@ -131,25 +126,25 @@ class Transfer extends Model {
 
     //hàm này kiểm tra 2 acc cùng ngân hàng k và lưu tax của bank đó lại
     static async check_Bank(id){
-        const transfer = await Transfer.findOne({
+        await Transfer.findOne({
             where: {
                 id,
             }
-        });
-        const user_acc = await User.findById(transfer.STK_acc);
-        const user_rec = await User.findById(transfer.SKT);
-        
-        const bank_acc = await Bank.findByCode(transfer.bank);
+        }).then(async temp=>{
+            const user_acc = await User.findById(temp.STK_acc);
+            const user_rec = await User.findById(temp.SKT);
+            
+            const bank_acc = await Bank.findByCode(temp.bank);
 
-        if(user_acc.bank===user_rec.bank){
-            transfer.tax=bank_acc.same_bank;
-            return transfer.save();
+            if(user_acc.bank==user_rec.bank){
+                temp.tax=bank_acc.same_bank;
+                return temp.save();
+            }
+            else{
+                temp.tax=bank_acc.other_banks
+                return temp.save();
         }
-        else{
-            transfer.tax=bank_acc.other_banks
-            return transfer.save();
-        }
-    }
+    })};
 
  };
 

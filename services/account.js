@@ -13,6 +13,7 @@ class Account extends Model {
 
     //hàm này check xem acc_bank của ng gửi có đủ số tiền đó để gửi hay k
     static async check_money_Bank(STK_acc,STK,money){
+        const x=Number(money);
         const user_acc= await User.findById(STK_acc);
         const user_rec= await User.findById(STK);
         const bank= await Bank.findByCode(user_acc.bank);
@@ -24,7 +25,8 @@ class Account extends Model {
         else{
             temp=bank.other_banks;
         }
-        if((acc.money-(money+temp))>0){
+        console()
+        if((acc.money-(x+temp))>0){
             return true;
         }
         else{
