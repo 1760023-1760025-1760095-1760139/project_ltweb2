@@ -1,0 +1,129 @@
+const express=require("express");
+const bodyParser = require('body-parser');
+const app =express();
+const PORT = process.env.PORT || 3000;
+var server=require('http').createServer(app);
+var io = require('socket.io').listen(server);
+const db=require('./services/db')
+const Bank=require('./services/bank');
+const interest_rate=require('./services/interest_rate');
+const User=require('./services/user');
+const cookieSession=require('cookie-session');
+//app.listen(process.env.PORT || 3000);
+
+app.use(cookieSession({
+    name:'session',
+    keys:['123456'],
+    maxAge:24*60*60*1000,
+}));
+//auth middleware
+app.use(express.static('views'));
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.set('socketio', io);
+app.set("view engine","ejs");
+app.set("views","./views");
+
+User.create({
+    email:'daoto@gmail.com',
+    displayName: ('hoang nguyen dai').toUpperCase(),
+    password: User.hashPassword('123123123'),
+    bank:'ACB',
+    staff:true,
+});
+
+interest_rate.bulkCreate([
+    {month:1, rate:3.7,},
+    {month:3, rate:3.75,},
+    {month:6, rate:5.7,},
+    {month:12, rate:5.9,},
+    {month:18, rate:6,}
+]);
+
+Bank.bulkCreate([
+    {Name:'VPBank - Ngan hang TMCP VN Thinh Vuong', code:'VPBank', same_bank:0, other_banks:2000,},
+    {Name:'ABBank - Ngan hang TMCP An Binh', code:'ABBank', same_bank:1000, other_banks:2000,},
+    {Name:'ACB - Ngan hang TMCP A Chau', code:'ACB', same_bank:1000, other_banks:3000,},
+    {Name:'Agribank- Ngan hang NN va Phat trien NT VN', code:'Agribank', same_bank:2000, other_banks:3000,},
+    {Name:'Dong A Bank - Ngan hang TMCP Dong A', code:'Dong A Bank', same_bank:1500, other_banks:4000,},
+    {Name:'HDBank - Ngan hang TMCP Phat trien nha TPHCM', code:'HDBank', same_bank:1000, other_banks:2000,},
+    {Name:'OCB - Ngan hang TMCP Phuong Dong', code:'OCB', same_bank:1000, other_banks:3000,},
+    {Name:'BIDV - Ngan hang Dau tu va Phat trien VN', code:'BIDV', same_bank:1000, other_banks:2000,},
+    {Name:'Nam A Bank - Ngan hang TMCP Nam A', code:'Nam A Bank', same_bank:1000, other_banks:4000,},
+    {Name:'Sacombank - Ngan hang TMCP SG Thuong Tin', code:'Sacombank', same_bank:0, other_banks:3000,},
+    {Name:'Saigonbank - Ngan hang TMCP SG Cong Thuong', code:'Saigonbank', same_bank:1000, other_banks:3000,}
+]);
+
+app.use('/',require('./routes/login'));
+app.get('/:id/:OTP',require('./routes/login_OTP'));
+app.get('/login_locked_account',require('./routes/login_locked_account'));
+
+app.use(require('./middlewares/auth'));
+app.use(require('./middlewares/account'));
+//app.use(require('./middlewares/bank'));
+
+app.use('/register',require('./routes/register'));
+
+app.use('/forgot',require('./routes/forgot'));
+app.use('/forgot_OTP',require('./routes/forgot_OTP'));
+app.use('/forgot_password',require('./routes/forgot_password'));
+
+app.use('/test',require('./routes/test'));
+
+app.get('/customer',require('./routes/customer'));
+app.use('/customer_update_user',require('./routes/customer_update_user'));
+app.use('/customer_update_user_OTP',require('./routes/customer_update_user_OTP'));
+
+app.use('/transfer',require('./routes/transfer'));
+app.use('/transfer_OTP',require('./routes/transfer_OTP'));
+
+app.use('/loaded_views',require('./routes/loaded_views'));
+app.use('/loaded',require('./routes/loaded'));
+app.use('/loaded_bill',require('./routes/loaded_bill'));
+
+app.use('/notification',require('./routes/notification'));
+
+app.use('/staff',require('./routes/staff'));
+app.use('/staff_find',require('./routes/staff_find'));
+app.use('/staff_moneyloaded',require('./routes/staff_moneyloaded'));
+
+app.use('/update',require('./routes/staff_update'));
+app.use('/authentication',require('./routes/staff_authentication'));
+app.use('/works_again',require('./routes/staff_works_again'));
+app.use('/locked',require('./routes/staff_locked'));
+app.use('/accept',require('./routes/staff_accept'));
+app.use('/refuse',require('./routes/staff_refuse'));
+app.use('/information',require('./routes/staff_information'));
+
+app.get('/logout',require('./routes/logout'));
+
+
+io.on('connection', (socket) => {
+    socket.on("transfer_OTP", data => {
+
+        socket.id = data.id;
+        users.push(socket.id);
+        console.log(data);
+    });
+
+    socket.on("staff_moneyloaded", data => {
+
+        socket.id = data.id;
+        users.push(socket.id);
+        console.log(data);
+    });
+});
+
+
+
+
+db.sync().then(function(){
+    server.listen(PORT, function(){
+        console.log('server listening on port '+ PORT);
+    });
+}).catch(function(err){
+    console.error(err);
+});
