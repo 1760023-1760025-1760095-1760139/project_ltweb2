@@ -12,7 +12,7 @@ const Account_saving = require('../services/account_saving');
 const router = new Router();
 
 var errors=[];
-var time_day;
+var time_day=0;
 router.get('/',asyncHandler(async function (req,res){
     const user= await User.findById(req.session.userId);
     const bank_user=await Bank.findByCode(user.bank);
@@ -26,28 +26,15 @@ router.get('/',asyncHandler(async function (req,res){
             delete req.session.userId;
             return res.redirect('/login_authentication');
         }
+        if(user.lock==true){
+            delete req.session.userId;
+            return res.redirect('login_locked_account');
+        }
         if(account_saving){
-            var today = new Date();
-            var date= today.toISOString();
-            var sent_date=date.substring(0,10);
-            if(account_saving.date_received==sent_date || account_saving.check==false){
-                await Email.send(user.email,'Thông báo!!!',`Tài khoản tiết kiệm đã đến hẹn vui lòng rút tiền vào tài khoản gốc. \n
-                        Trân trọng và cảm ơn!!!.\n
-                        Người gửi: Ngân hàng ${bank.Name}.`);
-
-                var string=`Tài khoản tiết kiệm đã đến hẹn vui lòng rút tiền vào tài khoản gốc. \n
-                        Trân trọng và cảm ơn!!!.\n
-                        Người gửi: Ngân hàng ${bank.Name}.`;
-                            
-                await Notification.addNotification(user.id,string,sent_date);
-                account_saving.check=true;
-                account_saving.save();
-            }
             time_day=await Interest_rate.sum_day(req.session.userId);
         }
         if(req.session.idTransfer){
-            var time_day=await Interest_rate.sum_day(req.session.userId);
-            return res.render('transfer_OTP',{errors,bank_user,time_day,account_saving});
+            return res.render('transfer_OTP',{errors,bank,time_day,account_saving});
         }
         return res.redirect('/transfer');
     }
@@ -56,24 +43,23 @@ router.get('/',asyncHandler(async function (req,res){
     }
 }));
 
-router.post('/',[    
-    body('OTP')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong OTP!!!'),//k dc trống
-],asyncHandler(async function (req,res){
+router.post('/',asyncHandler(async function (req,res){
     errors = validationResult(req);
     const user= await User.findById(req.session.userId);
     const bank_user=await Bank.findByCode(user.bank);
-    time_day=await Interest_rate.sum_day(req.session.userId);
     const account_saving=await Account_saving.findBySTK(req.session.userId);
     if(user.authentication!=null){
         req.session.id=req.session.userId;
         delete req.session.userId;
         return res.redirect('/login_authentication');
     }
+    if(user.lock==true){
+        delete req.session.userId;
+        return res.redirect('login_locked_account');
+    }
     if (!errors.isEmpty()) {
         errors = errors.array();
-        return res.render('transfer_OTP', {errors,bank_user,time_day,account_saving});
+        return res.render('transfer_OTP', {errors,bank,time_day,account_saving});
     }
     errors = [];
 
@@ -91,57 +77,108 @@ router.post('/',[
         const acc_rec= await Account.findById(transfer.STK);
         const user_rec= await User.findById(transfer.STK);
         const bank_rec= await Bank.findByCode(user_rec.bank);
-        
-        //khoản tiền gửi sẽ bị trừ vào tk ng gửi
-        acc.money=acc.money-transfer.money-transfer.tax;
-        acc.save();
 
-        //gửi email báo số dư cho ng gửi
-        Email.send(user_acc.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa giảm ${transfer.money} VND vào ${transfer.createdAt}. \n
-            Số dư hiện tại: ${acc.money} VND. \n
-            Mô tả: ${transfer.description}. \n
-            Gửi cho số tài hoản ${transfer.STK} của ngân hàng ${bank_rec.Name}. \n
-            Tên người nhận ${user_rec.displayName}.\n
-            Số tiền: ${transfer.money} VND phí ${transfer.tax} VND.`);
+        if(transfer.currency_unit=="VND"){
+            
+            //khoản tiền gửi sẽ bị trừ vào tk ng gửi
+            acc.money=acc.money-transfer.money-transfer.tax;
+            acc.save();
 
-        var string=`Số dư tài khoản vừa giảm ${transfer.money} VND vào ${transfer.createdAt}. \n
-            Số dư hiện tại: ${acc.money} VND. \n
-            Mô tả: ${transfer.description}. \n
-            Gửi cho số tài hoản ${transfer.STK} của ngân hàng ${bank_rec.Name}. \n
-            Tên người nhận ${user_rec.displayName}.\n
-            Số tiền: ${transfer.money} VND phí ${transfer.tax} VND.`;
+            //gửi email báo số dư cho ng gửi
+            Email.send(user_acc.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa giảm ${transfer.money} VND vào ${transfer.createdAt}. \n
+                Số dư hiện tại: ${acc.money} VND và ${acc.money_USD} USD. \n
+                Mô tả: ${transfer.description}. \n
+                Gửi cho số tài hoản ${transfer.STK} của ngân hàng ${bank_rec.Name}. \n
+                Tên người nhận ${user_rec.displayName}.\n
+                Số tiền: ${transfer.money} VND phí ${transfer.tax} VND.`);
 
-        var today = new Date();
-        var date= today.toISOString();
-        var date_name=date.substring(0,10)
-        const notification=await Notification.addNotification(user_acc.id,string,date_name);
+            var string=`Số dư tài khoản vừa giảm ${transfer.money} VND vào ${transfer.createdAt}. \n
+                Số dư hiện tại: ${acc.money} VND và ${acc.money_USD} USD. \n
+                Mô tả: ${transfer.description}. \n
+                Gửi cho số tài hoản ${transfer.STK} của ngân hàng ${bank_rec.Name}. \n
+                Tên người nhận ${user_rec.displayName}.\n
+                Số tiền: ${transfer.money} VND phí ${transfer.tax} VND.`;
 
-        //khoản tiền gửi sẽ được cộng vào tk ng nhận
-        acc_rec.money=acc_rec.money+transfer.money;
-        acc_rec.save();
+            var today = new Date();
+            var date= today.toISOString();
+            var date_name=date.substring(0,10)
+            const notification=await Notification.addNotification(user_acc.id,string,date_name);
 
-        //gửi email báo số dư cho ng nhận
-        Email.send(user_rec.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa tăng ${transfer.money} VND vào ${transfer.createdAt}. \n
-            Số dư hiện tại: ${acc_rec.money} VND. \n
-            Mô tả: ${transfer.description}. \n
-            Nhận từ số tài hoản ${transfer.STK_acc} của ngân hàng ${bank_acc.Name}. \n
-            Tên người gửi ${user_acc.displayName}.\n
-            Số tiền: ${transfer.money} VND.`);
+            //khoản tiền gửi sẽ được cộng vào tk ng nhận
+            acc_rec.money=acc_rec.money+transfer.money;
+            acc_rec.save();
 
-        string=`Số dư tài khoản vừa tăng ${transfer.money} VND vào ${transfer.createdAt}. \n
-            Số dư hiện tại: ${acc_rec.money} VND. \n
-            Mô tả: ${transfer.description}. \n
-            Nhận từ số tài hoản ${transfer.STK_acc} của ngân hàng ${bank_acc.Name}. \n
-            Tên người gửi ${user_acc.displayName}.\n
-            Số tiền: ${transfer.money} VND.`;
-        notification=await Notification.addNotification(user_rec.id,string,date_name);
+            //gửi email báo số dư cho ng nhận
+            Email.send(user_rec.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa tăng ${transfer.money} VND vào ${transfer.createdAt}. \n
+                Số dư hiện tại: ${acc_rec.money} VND. \n
+                Mô tả: ${transfer.description}. \n
+                Nhận từ số tài hoản ${transfer.STK_acc} của ngân hàng ${bank_acc.Name}. \n
+                Tên người gửi ${user_acc.displayName}.\n
+                Số tiền: ${transfer.money} VND.`);
 
-        delete req.session.idTransfer;
-        return res.redirect('/customer');
+            string=`Số dư tài khoản vừa tăng ${transfer.money} VND vào ${transfer.createdAt}. \n
+                Số dư hiện tại: ${acc_rec.money} VND. \n
+                Mô tả: ${transfer.description}. \n
+                Nhận từ số tài hoản ${transfer.STK_acc} của ngân hàng ${bank_acc.Name}. \n
+                Tên người gửi ${user_acc.displayName}.\n
+                Số tiền: ${transfer.money} VND.`;
+            notification=await Notification.addNotification(user_rec.id,string,date_name);
+
+            delete req.session.idTransfer;
+            return res.redirect('/customer');
+        }
+        else{
+            //khoản tiền gửi sẽ bị trừ vào tk ng gửi
+            acc.money_USD=acc.money_USD-transfer.money;
+            acc.save();
+
+            //gửi email báo số dư cho ng gửi
+            Email.send(user_acc.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa giảm ${transfer.money} USD vào ${transfer.createdAt}. \n
+                Số dư hiện tại: ${acc.money} VND và ${acc.money_USD} USD. \n
+                Mô tả: ${transfer.description}. \n
+                Gửi cho số tài hoản ${transfer.STK} của ngân hàng ${bank_rec.Name}. \n
+                Tên người nhận ${user_rec.displayName}.\n
+                Số tiền: ${transfer.money} USD.`);
+
+            var string=`Số dư tài khoản vừa giảm ${transfer.money} USD vào ${transfer.createdAt}. \n
+                Số dư hiện tại: ${acc.money} VND và ${acc.money_USD} USD. \n
+                Mô tả: ${transfer.description}. \n
+                Gửi cho số tài hoản ${transfer.STK} của ngân hàng ${bank_rec.Name}. \n
+                Tên người nhận ${user_rec.displayName}.\n
+                Số tiền: ${transfer.money} USD.`;
+
+            var today = new Date();
+            var date= today.toISOString();
+            var date_name=date.substring(0,10)
+            const notification=await Notification.addNotification(user_acc.id,string,date_name);
+
+            //khoản tiền gửi sẽ được cộng vào tk ng nhận
+            acc_rec.money_USD=acc_rec.money_USD+transfer.money;
+            acc_rec.save();
+
+            //gửi email báo số dư cho ng nhận
+            Email.send(user_rec.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa tăng ${transfer.money} USD vào ${transfer.createdAt}. \n
+                Số dư hiện tại: ${acc_rec.money} VND và ${acc_rec.money_USD} USD. \n
+                Mô tả: ${transfer.description}. \n
+                Nhận từ số tài hoản ${transfer.STK_acc} của ngân hàng ${bank_acc.Name}. \n
+                Tên người gửi ${user_acc.displayName}.\n
+                Số tiền: ${transfer.money} USD.`);
+
+            string=`Số dư tài khoản vừa tăng ${transfer.money} USD vào ${transfer.createdAt}. \n
+                Số dư hiện tại: ${acc_rec.money} VND và ${acc_rec.money_USD} USD. \n
+                Mô tả: ${transfer.description}. \n
+                Nhận từ số tài hoản ${transfer.STK_acc} của ngân hàng ${bank_acc.Name}. \n
+                Tên người gửi ${user_acc.displayName}.\n
+                Số tiền: ${transfer.money} USD.`;
+            notification=await Notification.addNotification(user_rec.id,string,date_name);
+
+            delete req.session.idTransfer;
+            return res.redirect('/customer');
+        }        
     }
 
     errors = [{ msg: "Wrong OTP!!!" }];
-    return res.render('transfer_OTP',{errors,bank_user,time_day,account_saving});
+    return res.render('transfer_OTP',{errors,bank,time_day,account_saving});
 }));
 
 module.exports = router;

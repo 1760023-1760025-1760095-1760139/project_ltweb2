@@ -363,19 +363,26 @@ Purchase:
                             <%}%>
                         </select>
                         <li>STK</li>
-                        <input type="number" placeholder="STK" id="STK" name="STK"/>
+                        <input type="number" placeholder="STK" id="STK" name="STK" required>
                         <li>Displayname</li>
-                        <input type="text" placeholder="VD: HOANG NGUYEN DAI" id="displayname" name="displayname"/>
+                        <input type="text" placeholder="VD: HOANG NGUYEN DAI" id="displayname" name="displayname" required>
                         <li>Money</li>
-                        <input type="number" placeholder="VND" id="money" name="money"/> 
+                        <input type="number" id="money" name="money" required> 
+                        <li>Currency</li>
+                        <select class="me-btn" id="currency" name="currency">
+                            <option>VND</option>
+                            <option>USD</option>
+                        </select>
                         <div class="form-group">
                             <% if(errors || errors.length){ %>
                             <% errors.forEach(item=>{%>
                             <%- `<p style="color:red">* ${item.msg}</p>`  %>
                             <%})%>
                             <%}%>
-                        </div>                   
-                        <button class="me-btn">OK</button>                   
+                        </div> 
+                        <div class="me-login-btn" style="margin-left: 33%">
+                            <input type="submit" class="me-btn" value="OK" style="width: 15px;"> 
+                        </div>                                                          
                     </div>
                 </form>
                 <div class="me-login-with-social">

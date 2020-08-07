@@ -272,7 +272,7 @@ Purchase:
                 <h1 class="me-login-title">OTP</h1>
                 <form action="/forgot_OTP" method="post">
                     <div class="me-login-form">
-                        <input type="text" placeholder="OTP" id="OTP" name="OTP"/> 
+                        <input type="text" placeholder="OTP" id="OTP" name="OTP" required> 
                         <div class="form-group">
                             <% if(errors || errors.length){ %>
                             <% errors.forEach(item=>{%>
@@ -280,7 +280,7 @@ Purchase:
                             <%})%>
                             <%}%>
                         </div>                       
-                        <button class="me-btn">Ok</button>
+                        <input type="submit" class="me-btn" value="OK" style="width: 15px;">
                     </div>
                 </form>
                 <div class="me-login-with-social">

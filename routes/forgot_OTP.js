@@ -39,11 +39,7 @@ router.get('/', asyncHandler(async function (req,res){
     }
 }));
 
-router.post('/',[    
-    body('OTP')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong OTP!!!'),//k dc trống
-],asyncHandler(async function (req,res){
+router.post('/',asyncHandler(async function (req,res){
     errors = validationResult(req);
     if (!errors.isEmpty()) {
         errors = errors.array();

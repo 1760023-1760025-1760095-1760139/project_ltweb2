@@ -156,9 +156,6 @@ Purchase:
                                                 <%- `<p style="color:red">* ${item.msg}</p>`  %>
                                                 <%})%>
                                             <%}%>
-                                            <% if(account_saving.check==true){ %>
-                                                <a class="me-btn" data-toggle="modal" data-target="#meWithdrawal">Withdrawal</a>
-                                            <%}%>
                                             <% if(account_saving.check!=true){ %>
                                                 <a class="me-btn" data-toggle="modal" data-target="#meConfirm">Cancel</a>
                                             <%}%>
@@ -349,27 +346,6 @@ Purchase:
         <span>USD/CAD +0.03873%</span>
         <span>EUR/JPY -0.66775%</span>
     </p>
-</div>
-<!--Withdrawal-->
-<div class="modal fade me-login-model" id="meWithdrawal">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <button type="button" class="close me-team-close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-            <div class="modal-body">
-                <h1 class="me-login-title">Password</h1>
-                <form action="/loaded_bill" method="post">
-                    <div class="me-login-form">
-                        <input type="password" placeholder="password" id="password" name="password"/>                      
-                        <input type="submit" class="me-btn" id="result" name="result" value="Withdrawal" style="width: 15px;">
-                    </div>
-                </form>
-                <div class="me-login-with-social">
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 <!--hủy giao dịch-->
 <div class="modal fade me-login-model" id="meConfirm">

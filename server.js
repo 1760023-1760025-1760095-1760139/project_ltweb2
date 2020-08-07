@@ -27,43 +27,14 @@ app.set('socketio', io);
 app.set("view engine","ejs");
 app.set("views","./views");
 
-User.create({
-    email:'daoto@gmail.com',
-    displayName: ('hoang nguyen dai').toUpperCase(),
-    password: User.hashPassword('123123123'),
-    bank:'ACB',
-    staff:true,
-});
-
-interest_rate.bulkCreate([
-    {month:1, rate:3.7,},
-    {month:3, rate:3.75,},
-    {month:6, rate:5.7,},
-    {month:12, rate:5.9,},
-    {month:18, rate:6,}
-]);
-
-Bank.bulkCreate([
-    {Name:'VPBank - Ngan hang TMCP VN Thinh Vuong', code:'VPBank', same_bank:0, other_banks:2000,},
-    {Name:'ABBank - Ngan hang TMCP An Binh', code:'ABBank', same_bank:1000, other_banks:2000,},
-    {Name:'ACB - Ngan hang TMCP A Chau', code:'ACB', same_bank:1000, other_banks:3000,},
-    {Name:'Agribank- Ngan hang NN va Phat trien NT VN', code:'Agribank', same_bank:2000, other_banks:3000,},
-    {Name:'Dong A Bank - Ngan hang TMCP Dong A', code:'Dong A Bank', same_bank:1500, other_banks:4000,},
-    {Name:'HDBank - Ngan hang TMCP Phat trien nha TPHCM', code:'HDBank', same_bank:1000, other_banks:2000,},
-    {Name:'OCB - Ngan hang TMCP Phuong Dong', code:'OCB', same_bank:1000, other_banks:3000,},
-    {Name:'BIDV - Ngan hang Dau tu va Phat trien VN', code:'BIDV', same_bank:1000, other_banks:2000,},
-    {Name:'Nam A Bank - Ngan hang TMCP Nam A', code:'Nam A Bank', same_bank:1000, other_banks:4000,},
-    {Name:'Sacombank - Ngan hang TMCP SG Thuong Tin', code:'Sacombank', same_bank:0, other_banks:3000,},
-    {Name:'Saigonbank - Ngan hang TMCP SG Cong Thuong', code:'Saigonbank', same_bank:1000, other_banks:3000,}
-]);
-
 app.use('/',require('./routes/login'));
 app.get('/:id/:OTP',require('./routes/login_OTP'));
 app.get('/login_locked_account',require('./routes/login_locked_account'));
 
 app.use(require('./middlewares/auth'));
 app.use(require('./middlewares/account'));
-//app.use(require('./middlewares/bank'));
+app.use(require('./middlewares/checkdate'));
+app.use(require('./middlewares/add'));
 
 app.use('/register',require('./routes/register'));
 
@@ -73,12 +44,19 @@ app.use('/forgot_password',require('./routes/forgot_password'));
 
 app.use('/test',require('./routes/test'));
 
-app.get('/customer',require('./routes/customer'));
+app.use('/customer',require('./routes/customer'));
 app.use('/customer_update_user',require('./routes/customer_update_user'));
 app.use('/customer_update_user_OTP',require('./routes/customer_update_user_OTP'));
+app.use('/customer_lock_account',require('./routes/customer_lock_account'));
+app.use('/customer_lock_transaction',require('./routes/customer_lock_transaction'));
 
 app.use('/transfer',require('./routes/transfer'));
 app.use('/transfer_OTP',require('./routes/transfer_OTP'));
+
+app.use('/USD_VND',require('./routes/USD_VND'));
+app.use('/USD_VND_pass',require('./routes/USD_VND_pass'));
+app.use('/VND_USD',require('./routes/VND_USD'));
+app.use('/VND_USD_pass',require('./routes/VND_USD_pass'));
 
 app.use('/loaded_views',require('./routes/loaded_views'));
 app.use('/loaded',require('./routes/loaded'));

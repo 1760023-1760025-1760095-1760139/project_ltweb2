@@ -273,7 +273,7 @@ Purchase:
                 <form action="/forgot" method="post">
                     <div class="me-login-form">
                         <li >Email</li>
-                        <input type="text" placeholder="VD: asd@gmail.com" id="email" name="email" />
+                        <input type="text" placeholder="VD: asd@gmail.com" id="email" name="email" required>
                         <div class="form-group">
                             <% if(errors || errors.length){ %>
                             <% errors.forEach(item=>{%>
@@ -282,7 +282,7 @@ Purchase:
                             <%}%>
                         </div>
                         <div class="me-login-btn">
-                            <button class="me-btn">OK</button>
+                            <input type="submit" class="me-btn" value="OK" style="width: 15px;">
                             <p>Don't have an account? <a href="/register" >Sign up</a></p>
                         </div>
                     </div>

@@ -36,70 +36,54 @@ class Transfer extends Model {
         });
     }
 
-    //hàm này tìm tất cả email của STK đó theo date
-    static async findByEmail_date(email,date){
-        Transfer.findAll({
-            where: {
-                email,
-            }
-        }).then(arr => arr.forEach(temp =>{
-            if(temp.OTP!=null){
-                Transfer.destroy({
-                    where:{
-                        id: temp.id,
-                    }
-                });
-            }
-        }));
-        return Transfer.findAll({
-            where: {
-                email,
-                date,
-            }
-        });
-    }
-
     //hàm này thêm thông tin người gửi
-    static async addTransfer_sender(STK_acc,STK,money,description){
+    static async addTransfer_sender(STK_acc,STK,money,description,currency_unit,date){
         return this.create({
             STK_acc,
             STK,
+            date,
             type:1,
             money,
             description,
+            currency_unit,
             OTP:crypto.randomBytes(3).toString('hex').toUpperCase(),
         }).then(temp => temp);
     }
 
     //hàm này thêm thông tin người nhận
-    static async addTransfer_receiver(STK_acc,STK,money,description){
+    static async addTransfer_receiver(STK_acc,STK,money,description,currency_unit,date){
         return this.create({
             STK_acc,
             STK,
+            date,
             type:2,
             money,
             description,
+            currency_unit,
         }).then(temp => temp);
     }
 
     //hàm này thêm thông tin bank
-    static async addTransfer_bank(STK_acc,money,bank){
+    static async addTransfer_bank(STK_acc,money,bank,currency_unit,date){
         return this.create({
             STK_acc,
             type:3,
+            date,
             money,
             bank,
+            currency_unit,
         }).then(temp => temp);
     }
 
     //hàm này lọc ra tất cả hnay người đó gửi có quá mức quy định hay không(200tr)
-    static async findAllSTK_sender(STK_acc,date){
+    static async findAllSTK_sender(STK_acc,date,currency_unit){
         var sum=0;
         Transfer.findAll({
             where: {
                 STK_acc,
                 date,
                 type:1,
+                currency_unit,
             }}).then(arr => arr.forEach(temp =>{
                 if(temp.OTP==null){
                     sum+=temp.money
@@ -124,28 +108,6 @@ class Transfer extends Model {
         });
     }
 
-    //hàm này kiểm tra 2 acc cùng ngân hàng k và lưu tax của bank đó lại
-    static async check_Bank(id){
-        await Transfer.findOne({
-            where: {
-                id,
-            }
-        }).then(async temp=>{
-            const user_acc = await User.findById(temp.STK_acc);
-            const user_rec = await User.findById(temp.SKT);
-            
-            const bank_acc = await Bank.findByCode(temp.bank);
-
-            if(user_acc.bank==user_rec.bank){
-                temp.tax=bank_acc.same_bank;
-                return temp.save();
-            }
-            else{
-                temp.tax=bank_acc.other_banks
-                return temp.save();
-        }
-    })};
-
  };
 
 Transfer.init({
@@ -162,13 +124,15 @@ Transfer.init({
         type: Sequelize.INTEGER,
         allowNull: false,
     },
+    currency_unit:{
+        type: Sequelize.STRING,//đơn vị tiền tệ
+    },
     description: {
         type: Sequelize.STRING,
     },
     date: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW(),
     },
     tax: {
         type: Sequelize.INTEGER,

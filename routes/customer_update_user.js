@@ -13,7 +13,7 @@ const Email=require('../services/email');
 const router = new Router();
 
 var errors=[];
-var time_day;
+var time_day=0;
 router.get('/',asyncHandler(async function (req,res){
     const user= await User.findById(req.session.userId)
     const bank=await Bank.findByCode(user.bank);
@@ -34,22 +34,6 @@ router.get('/',asyncHandler(async function (req,res){
             return res.redirect('login_locked_account');
         }
         if(account_saving){
-            var today = new Date();
-            var date= today.toISOString();
-            var sent_date=date.substring(0,10);
-            if(account_saving.date_received==sent_date || account_saving.check==false){
-                await Email.send(user.email,'Thông báo!!!',`Tài khoản tiết kiệm đã đến hẹn vui lòng rút tiền vào tài khoản gốc. \n
-                        Trân trọng và cảm ơn!!!.\n
-                        Người gửi: Ngân hàng ${bank.Name}.`);
-
-                var string=`Tài khoản tiết kiệm đã đến hẹn vui lòng rút tiền vào tài khoản gốc. \n
-                        Trân trọng và cảm ơn!!!.\n
-                        Người gửi: Ngân hàng ${bank.Name}.`;
-                            
-                await Notification.addNotification(user.id,string,sent_date);
-                account_saving.check=true;
-                account_saving.save();
-            }
             time_day=await Interest_rate.sum_day(req.session.userId);
         }
         return res.render('customer_update_user',{errors,bank,time_day,account_saving});
@@ -59,13 +43,8 @@ router.get('/',asyncHandler(async function (req,res){
     }
 }));
 
-router.post('/',[    
-    body('current_password')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Không được để trống Displayname!!!'),//k dc trống
+router.post('/',[
     body('password')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Không được để trống Password!!!')//k dc trống
         .isLength({min:6,max:50}).withMessage('Password Ki tu 6->50!!!')
         .custom((value, { req }) => {
             if (value == req.body.current_password) {
@@ -74,8 +53,6 @@ router.post('/',[
             return true;
         }),
     body('confirm_password')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Không được để trống Confirm Password!!!')//k dc trống
         .custom((value, { req }) => {
             if (value != req.body.password) {
                 throw new Error('Confirm password is wrong!!!');
@@ -87,7 +64,6 @@ router.post('/',[
     const user= await User.findById(req.session.userId)
     const bank=await Bank.findByCode(user.bank);
     const account_saving=await Account_saving.findBySTK(req.session.userId);
-    time_day=await Interest_rate.sum_day(req.session.userId);
     if (!errors.isEmpty()) {
         errors = errors.array();
         return res.render('customer_update_user', {errors,bank,time_day,account_saving});

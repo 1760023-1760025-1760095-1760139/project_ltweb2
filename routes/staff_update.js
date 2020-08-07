@@ -55,6 +55,10 @@ router.post('/',[
         user.email=req.body.email;
         user.save();
     }
+    if(req.body.password!==''){
+        user.password=await User.hashPassword(req.body.password);
+        user.save();
+    }
     if(req.body.displayname!==''){
         user.displayName=(req.body.displayname).toUpperCase();
         user.save();

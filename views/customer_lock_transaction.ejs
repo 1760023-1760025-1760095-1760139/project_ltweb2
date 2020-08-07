@@ -23,6 +23,13 @@ Purchase:
     <link rel="stylesheet" type="text/css" href="assets/css/swiper.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link rel="icon" type="image/png" href="assets/images/fav.png"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.css"></script>
+    <script>
+        $(document).ready(function(){
+            $("#meOTP").modal('show');
+        });
+    </script>
 </head>
 <body>
 <div class="me-main-wraper">
@@ -319,7 +326,7 @@ Purchase:
         <div class="row">
             <div class="col-lg-6">
                 <div class="me-copyright-block">
-                    <p>&copy; 2020 copyright all right reserved by <a href="/customer">trade coin</a></p>
+                    <p>&copy; 2020 copyright all right reserved by <a href="javascript:;">trade coin</a></p>
                 </div>
             </div>
         </div>
@@ -343,6 +350,39 @@ Purchase:
         <span>USD/CAD +0.03873%</span>
         <span>EUR/JPY -0.66775%</span>
     </p>
+</div>
+<div class="modal fade me-login-model" id="meOTP">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="close me-team-close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <div class="modal-body">
+                <% if(currentUser.transaction_lock==true){ %>
+                    <h1 class="me-login-title">Open transaction</h1>
+                <% } %>
+                <% if(currentUser.transaction_lock!=true){ %>
+                    <h1 class="me-login-title">Lock transaction</h1>
+                <% } %>
+                <form action="/customer_lock_transaction" method="post">
+                    <div class="me-login-form">
+                        <li >OTP</li>
+                        <input type="text" placeholder="Mã OTP" id="OTP" name="OTP" required>
+                        <div class="form-group">
+                            <% if(errors || errors.length){ %>
+                            <% errors.forEach(item=>{%>
+                            <%- `<p style="color:red">* ${item.msg}</p>`  %>
+                            <%})%>
+                            <%}%>
+                        </div>                      
+                        <div class="me-transaction-load-more">
+                            <input type="submit" class="me-btn" value="OK" style="width: 15px;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.js"></script>

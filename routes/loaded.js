@@ -95,6 +95,7 @@ router.post('/',asyncHandler(async function (req,res){
     else {
         money_rate=money*interest_rate.rate*0.01*1.5;
     }
+    money_rate = money_rate.toFixed(0);
 
     //tổng tiền
     total_money=Number(money)+Number(money_rate);
@@ -131,7 +132,6 @@ router.post('/',asyncHandler(async function (req,res){
     }
     const account_saving=await Account_saving.addAccount_saving(user.id,month,sent_date,appointment_date,interest_rate.rate,money_rate,money,total_money)
     account_user.money=account_user.money-money;
-    account_user.money_save=money;
     account_user.save();
 
     Email.send(user.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa giảm ${money} VND vào ngày ${account_saving.createdAt}. \n
@@ -141,24 +141,12 @@ router.post('/',asyncHandler(async function (req,res){
             Ngày mở Tài khoản tiết kiệm: ${sent_date}. \n
             Ngày đến hẹn:${appointment_date}. `);
 
-    Email.send(user.email,'Thay đổi số dư tài khoản tiết kiệm',`Số dư tài khoản tiết kiệm vừa tăng ${money} VND vào ${account_saving.createdAt}. \n
-            Ngày mở Tài khoản tiết kiệm: ${sent_date}. \n
-            Ngày đến hẹn:${appointment_date}.\n
-            Số dư tại ngày đến hạn: ${total_money} VND`);
-
     var string=`Số dư tài khoản vừa giảm ${money} VND vào ngày ${account_saving.createdAt}. \n
             Số dư hiện tại: ${account_user.money} VND. \n
             Mô tả: gửi tài khoản tiết kiệm ngân hàng ${bank.Name}. \n
             Số tiền: ${money} VND. \n
             Ngày mở Tài khoản tiết kiệm: ${sent_date}. \n
             Ngày đến hẹn:${appointment_date}. `;
-        
-    await Notification.addNotification(user.id,string,sent_date);
-
-    string=`Số dư tài khoản tiết kiệm vừa tăng ${money} VND vào ${account_saving.createdAt}. \n
-            Ngày mở Tài khoản tiết kiệm: ${sent_date}. \n
-            Ngày đến hẹn:${appointment_date}.\n
-            Số dư tại ngày đến hạn: ${total_money} VND.`;
         
     await Notification.addNotification(user.id,string,sent_date);
 

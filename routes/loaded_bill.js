@@ -70,43 +70,21 @@ router.post('/',[
     var date= today.toISOString();
     const sent_date= await Interest_rate.sent_date();
 
-    if(req.body.result=='Withdrawal'){
-        account_user.money=account_user.money+account_saving.total_money;
-        account_user.money_save=0;
-        account_user.save();
+    account_user.money=account_user.money+account_saving.money;
+    account_user.save();
 
-        await Email.send(user.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa tăng ${account_saving.total_money} VND vào ngày ${date}. \n
+    await Email.send(user.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa tăng ${account_saving.money} VND vào ngày ${date}. \n
                 Số dư hiện tại: ${account_user.money} VND. \n
-                Mô tả: rút tài khoản tiết kiệm từ ngân hàng ${bank.Name}. \n
-                Số tiền: ${account_saving.total_money} VND.`);
-
-        var string=`Số dư tài khoản vừa tăng ${account_saving.total_money} VND vào ngày ${date}. \n
-                    Số dư hiện tại: ${account_user.money} VND. \n
-                    Mô tả: rút tài khoản tiết kiệm từ ngân hàng ${bank.Name}. \n
-                    Số tiền: ${account_saving.total_money} VND.`;
-            
-        await Notification.addNotification(user.id,string,sent_date);
-        await Account_saving.deleteById(user.id);
-
-    }
-    else{
-        account_user.money=account_user.money+account_saving.money;
-        account_user.money_save=0;
-        account_user.save();
-
-        await Email.send(user.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa tăng ${account_saving.money} VND vào ngày ${date}. \n
-                Số dư hiện tại: ${account_user.money} VND. \n
-                Mô tả: rút tài khoản tiết kiệm từ ngân hàng ${bank.Name}. \n
+                Mô tả: hủy giao dịch tiết kiệm ${bank.Name}. \n
                 Số tiền: ${account_saving.money} VND.`);
 
-        var string=`Số dư tài khoản vừa tăng ${account_saving.money} VND vào ngày ${date}. \n
+    var string=`Số dư tài khoản vừa tăng ${account_saving.money} VND vào ngày ${date}. \n
                 Số dư hiện tại: ${account_user.money} VND. \n
-                Mô tả: rút tài khoản tiết kiệm từ ngân hàng ${bank.Name}. \n
+                Mô tả: hủy giao dịch tiết kiệm ${bank.Name}. \n
                 Số tiền: ${account_saving.money} VND.`;
             
-        await Notification.addNotification(user.id,string,sent_date);
-        await Account_saving.deleteById(user.id);
-    }
+    await Notification.addNotification(user.id,string,sent_date);
+    await Account_saving.deleteById(user.id);
 
     return res.redirect('/customer');
 }));

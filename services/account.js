@@ -45,6 +45,10 @@ Account.init({
         type: Sequelize.INTEGER,
         allowNull: false,
     },
+    money_USD:{
+        type: Sequelize.FLOAT,
+        allowNull: false,
+    },
     money_save: {
         type: Sequelize.INTEGER,
         allowNull: false,

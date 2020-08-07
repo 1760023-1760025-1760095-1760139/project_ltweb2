@@ -41,12 +41,8 @@ router.get('/', asyncHandler(async function (req,res){
 
 router.post('/',[ 
     body('password')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Password!!!')//k dc trống
         .isLength({min:6,max:50}).withMessage('Ki tu Password 6->50!!!'),
     body('confirm_password')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Confirm Password!!!')//k dc trống
         .custom((value, { req }) => {
             if (value != req.body.password) {
                 throw new Error('Confirm password is wrong!!!');

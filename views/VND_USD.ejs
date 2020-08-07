@@ -23,6 +23,13 @@ Purchase:
     <link rel="stylesheet" type="text/css" href="assets/css/swiper.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link rel="icon" type="image/png" href="assets/images/fav.png"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.css"></script>
+    <script>
+        $(document).ready(function(){
+            $("#meVND_USD").modal('show');
+        });
+    </script>
 </head>
 <body>
 <div class="me-main-wraper">
@@ -344,13 +351,59 @@ Purchase:
         <span>EUR/JPY -0.66775%</span>
     </p>
 </div>
+<!-- Transfer Modal -->
+<div class="modal fade me-login-model" id="meVND_USD">
+    <div class="me-banner-two-coin">
+        <img src="assets/images/coins.png" alt="image" class="img-fluid">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="close me-team-close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <div class="modal-body">
+                <h1 class="me-login-title">VND -> USD</h1>
+                <form action="/VND_USD" method="post">
+                    <div class="me-login-form">
+                        <input type="number" placeholder="VND" id="money" name="money" required>  
+                        <div class="form-group">
+                            <% if(errors || errors.length){ %>
+                            <% errors.forEach(item=>{%>
+                            <%- `<p style="color:red">* ${item.msg}</p>`  %>
+                            <%})%>
+                            <%}%>
+                        </div>                   
+                        <input type="submit" class="me-btn" value="OK" style="width: 15px;">
+                        <p style="color:red">Lưu ý: 23000 VND = 1 USD</p>                                      
+                    </div>
+                </form>
+                <div class="me-login-with-social">
+                    <span>or</span>
+                    <p>Login with another account</p>
+                    <ul>
+                        <li><a href="javascript:;"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-linkedin-in"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-pinterest-p"></i></a></li>
+                        <li><a href="javascript:;"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="./routes/transfer_OTP"></script>
-<script src="./routes/staff_moneyloaded"></script>
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
+<script src="./routes/staff_moneyloaded"></script>
 <script src="assets/js/swiper.min.js"></script>
 <script src="assets/js/SmoothScroll.min.js"></script>
 <script src="assets/js/ui_range_slider.js"></script>

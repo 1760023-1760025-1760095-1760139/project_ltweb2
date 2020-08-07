@@ -36,8 +36,9 @@ class Interest_rate extends Model {
             var day_received=received_date.getDate();
             var month_received=received_date.getMonth();
             var year_received=received_date.getFullYear();
+            
 
-            return (30 - day_sent + day_received + (11-month_sent+month_received+(year_received-year_sent)*12)*30);
+            return (30 - day_sent + day_received + (11-month_sent+month_received+(year_received-year_sent-1)*12)*30);
         }
     };
  };

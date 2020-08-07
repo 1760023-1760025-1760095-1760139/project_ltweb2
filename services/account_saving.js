@@ -27,28 +27,6 @@ class Account_saving extends Model {
         });
     };
 
-    static async send_email(){
-        return Account_saving.findAll().then(async arr => arr.forEach(async temp =>{
-                var today = new Date();
-                var date= today.toISOString();
-                var sent_date=date.substring(0,10);
-                if(temp.date_received==date_name || temp.check==false){
-                    const user=await User.findById(temp.STK);
-                    const bank=await Bank.findByCode(user.bank);
-                    await Email.send(user.email,'Thông báo!!!',`Tài khoản tiết kiệm đã đến hẹn vui lòng rút tiền vào tài khoản gốc. \n
-                            Trân trọng và cảm ơn!!!.\n
-                            Người gửi: Ngân hàng ${bank.Name}.`);
-
-                    var string=`Tài khoản tiết kiệm đã đến hẹn vui lòng rút tiền vào tài khoản gốc. \n
-                            Trân trọng và cảm ơn!!!.\n
-                            Người gửi: Ngân hàng ${bank.Name}.`;
-                        
-                    await Notification.addNotification(user.id,string,sent_date);
-                    temp.check=true;
-                    temp.save();
-                }}));
-    };
-
     static async deleteById(STK){
         return Account_saving.destroy({
             where:{

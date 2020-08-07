@@ -23,6 +23,13 @@ Purchase:
     <link rel="stylesheet" type="text/css" href="assets/css/swiper.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link rel="icon" type="image/png" href="assets/images/fav.png"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.css"></script>
+    <script>
+        $(document).ready(function(){
+            $("#mePassword").modal('show');
+        });
+    </script>
 </head>
 <body>
 <div class="me-main-wraper">
@@ -319,7 +326,7 @@ Purchase:
         <div class="row">
             <div class="col-lg-6">
                 <div class="me-copyright-block">
-                    <p>&copy; 2020 copyright all right reserved by <a href="/customer">trade coin</a></p>
+                    <p>&copy; 2020 copyright all right reserved by <a href="javascript:;">trade coin</a></p>
                 </div>
             </div>
         </div>
@@ -344,13 +351,40 @@ Purchase:
         <span>EUR/JPY -0.66775%</span>
     </p>
 </div>
+<div class="modal fade me-login-model" id="mePassword">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="close me-team-close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <div class="modal-body">
+                <h1 class="me-login-title">Password</h1>
+                <form action="/USD_VND_pass" method="post">
+                    <div class="me-login-form">
+                        <input type="password" id="password" name="password" required>  
+                        <div class="form-group">
+                            <% if(errors || errors.length){ %>
+                            <% errors.forEach(item=>{%>
+                            <%- `<p style="color:red">* ${item.msg}</p>`  %>
+                            <%})%>
+                            <%}%>
+                        </div>                      
+                        <input type="submit" class="me-btn" value="OK" style="width: 15px;">
+                    </div>
+                </form>
+                <div class="me-login-with-social">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="./routes/transfer_OTP"></script>
-<script src="./routes/staff_moneyloaded"></script>
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
+<script src="./routes/staff_moneyloaded"></script>
 <script src="assets/js/swiper.min.js"></script>
 <script src="assets/js/SmoothScroll.min.js"></script>
 <script src="assets/js/ui_range_slider.js"></script>

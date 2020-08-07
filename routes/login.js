@@ -22,7 +22,6 @@ router.get('/', asyncHandler(async function (req,res){
 router.post('/',[
     body('email')
         .notEmpty().withMessage('Khong duoc de trong Email!!!')
-        .isEmail().withMessage('Email not verified!!!')//dữ liệu nhập vào có phải là email hay k
         .normalizeEmail()
         .custom(async function(email){
             const found=await User.findByEmail(email);
@@ -32,8 +31,6 @@ router.post('/',[
             return true;
         }),
     body('password')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Password!!!')//k dc trống
         .isLength({min:6,max:50}).withMessage('Ki tu Password 6->50!!!'),
 ],asyncHandler(async function (req,res){
     errors = validationResult(req);

@@ -81,7 +81,7 @@ Purchase:
                     <div class="me-banner-text">
                         <h1>Money doesn't come without care</h1>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                        <a href="javascript:;" class="me-btn">Learn more</a>
+                        <a href="/" class="me-btn">Learn more</a>
                     </div>
                 </div>
                 <div class="me-banner-icon">
@@ -228,7 +228,7 @@ Purchase:
                 </div>
             </div>
         </div>
-    </div>
+    </div> 
 </div>
 <!-- Copyright Footer -->
 <div class="me-footer-copyright">
@@ -273,9 +273,9 @@ Purchase:
                 <form action="/" method="POST">
                     <div class="me-login-form">
                         <li >Username</li>
-                        <input type="text" placeholder="VD: asd@gmail.com" id="email" name="email"/>
+                        <input type="text" placeholder="VD: asd@gmail.com" id="email" name="email" required>
                         <li >Password</li>
-                        <input type="password" placeholder="Password" id="password" name="password"/>
+                        <input type="password" placeholder="Password" id="password" name="password" required>
                         <div class="me-remember">
                             <label>Remember Me
                                 <input type="checkbox">
@@ -291,7 +291,7 @@ Purchase:
                             <%}%>
                         </div>
                         <div class="me-login-btn">
-                            <button class="me-btn">Login</button>
+                            <input type="submit" class="me-btn" value="Login" style="width: 15px;">
                             <p>Don't have an account? <a href="/register" >Sign up</a></p>
                         </div>
                     </div>

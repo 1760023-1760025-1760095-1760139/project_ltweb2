@@ -73,28 +73,38 @@ User.init({
     bank: {
         type: Sequelize.STRING,
     },
-    OTP: {//lúc lập nick nên k cần xác thực bên staff
-        type: Sequelize.STRING,
+    OTP: {
+        type: Sequelize.STRING,//kích hoạt tài khoản
     },
-    forgot: {//đổi mk khẩu khi quên k cần xác thực bên staff
-        type: Sequelize.STRING,
+    forgot: {
+        type: Sequelize.STRING,//đổi mk khẩu khi quên 
     },
-    update_OTP: {//đổi mk khẩu khi đang trong tài khoản cần xác thực bên staff kèm hình ảnh cmnd
-        type: Sequelize.STRING,
+    update_OTP: {
+        type: Sequelize.STRING,//đổi mk khẩu khi đang trong tài khoản cần xác thực bên staff kèm hình ảnh cmnd
     },
     update_password: {
         type: Sequelize.STRING,
     },
-    authentication:{//gửi mã otp yêu cầu user xác thực
-        type: Sequelize.STRING,
+    authentication:{
+        type: Sequelize.STRING,//gửi mã otp yêu cầu user xác thực
     },
     authentication_check:{//khi user xác thực sẽ gửi cho staff để chấp nhận/từ chối
         type: Sequelize.BOOLEAN,
         defaultValue: false,
     },
     lock: {
+        type: Sequelize.BOOLEAN,//khóa tài khoản
+        defaultValue: false,
+    },
+    lock_OTP: {
+        type: Sequelize.STRING,//gửi mã otp tự mình xác thực để khóa tài khoản
+    },
+    transaction_lock: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
+    },
+    transaction_lock_OTP: {//khóa giao dịch
+        type: Sequelize.STRING,
     },
     staff: {//phân quyền
         type: Sequelize.BOOLEAN,

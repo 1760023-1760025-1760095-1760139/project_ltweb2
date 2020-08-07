@@ -33,7 +33,6 @@ router.get('/', asyncHandler(async function (req,res){
 
 router.post('/',[
     body('email')
-        .notEmpty().withMessage('Khong duoc de trong Email!!!')
         .isEmail().withMessage('Email not verified!!!')//dữ liệu nhập vào có phải là email hay k
         .normalizeEmail()
         .custom(async function(email){

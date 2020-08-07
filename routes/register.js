@@ -104,6 +104,7 @@ router.post('/',[
         id:user.id,
         email:user.email,
         money:0,
+        money_USD:0,
         money_save:0,
     })
 

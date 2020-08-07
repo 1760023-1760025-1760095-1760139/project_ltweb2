@@ -150,32 +150,47 @@ Purchase:
                                     <div class="me-profile-data">
                                         <p><%=currentUser.email %></p>
                                     </div>
+                                </li>                               
+                                <li>
+                                    <div class="me-profile-data">
+                                        <p>Birthday</p>
+                                    </div>
+                                    <div class="me-profile-data">
+                                        <p><%=currentUser.birthday %></p>
+                                    </div>
                                 </li>
                                 <li>
                                     <div class="me-profile-data">
                                         <p>SDT</p>
                                     </div>
                                     <div class="me-profile-data">
-                                        <p><%=currentUser.SDT %></p>
+                                        <p>+84 <%=currentUser.SDT %></p>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="me-profile-data">
-                                        <p>Tên NH</p>
-                                    </div>
-                                    <div class="me-profile-data">
-                                        <p><%=bank.Name %></p>
-                                    </div>
-                                </li>                                
-                                <li>
-                                    <div class="me-profile-data">
-                                        <p>Date of issue</p>
-                                    </div>
-                                    <div class="me-profile-data">
-                                        <p><%=currentUser.date_of_issue %></p>
-                                    </div>
-                                </li>
-                                <li><button class="me-btn" data-toggle="modal" data-target="#meUpdate">Update</button></li>
+                                <form action="/customer" method="post">
+                                    <li>
+                                        <div class="me-profile-data">
+                                            <p>Lock account</p>
+                                        </div>
+                                        <div class="me-profile-data">
+                                            <input type="submit" id="lock" name="lock" value="Lock account" style="width: 120px;color:green;">
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="me-profile-data">
+                                            <p>Transaction lock</p>
+                                        </div>
+                                        <div class="me-profile-data">
+                                            <% if(currentUser.transaction_lock==true){ %>
+                                                <input type="submit" id="lock" name="lock" value="Open transaction" style="width: 150px;color:red;">
+                                            <% } %>
+                                            <% if(currentUser.transaction_lock!=true){ %>
+                                                <input type="submit" id="lock" name="lock" value="Lock transaction" style="width: 150px;color:green;">
+                                            <% } %>
+                                        </div>
+                                    </li>
+                                </form>
+                                <li><a class="me-btn" href="/customer_update_user">Change Password</a></li>
                             </ul>
                         </div>
                     </div>
@@ -189,31 +204,58 @@ Purchase:
                         </div>
                         <div class="me-account-summary-body me-account-money-detail">
                             <ul>
-                                <li>
-                                    <div class="me-summary-data">
-                                        <p>Account</p>
-                                        <p><strong><%=currentAccount.money %> VND</strong></p>
-                                    </div>
-                                    <a class="me-btn" href="/transfer">Transfer</a>
-                                </li>
-                                <li>
-                                    <div class="me-summary-data">
-                                        <p>Account saving</p>
-                                        <p><strong><%=currentAccount.money_save %> VND</strong></p>
-                                    </div>
-                                    <% if(account_saving){%> 
-                                        <% if(account_saving.check==true){%>
-                                            <a class="me-btn" href="/loaded_bill">Withdrawal</a>
+                                <% if(currentUser.transaction_lock==true){ %>
+                                    <li>
+                                        <div class="me-summary-data">
+                                            <p>Account</p>
+                                            <p><strong><%=currentAccount.money %> VND</strong></p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="me-summary-data">
+                                            <p><strong><%=currentAccount.money_USD %> USD</strong></p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="me-summary-data">
+                                            <p>Account saving</p>
+                                            <p><strong><%=currentAccount.money_save %> VND</strong></p>
+                                        </div>
+                                    </li>
+                                    <li style="color:red">Tài khoản đã bị khóa giao dịch!!!</li>
+                                <% } %>
+                                <% if(currentUser.transaction_lock!=true){ %>
+                                    <li>
+                                        <div class="me-summary-data">
+                                            <p>Account</p>
+                                            <p><strong><%=currentAccount.money %> VND</strong></p>
+                                        </div>
+                                        <a class="me-btn" href="/VND_USD">VND -> USD</a>
+                                    </li>
+                                    <li>
+                                        <div class="me-summary-data">
+                                            <p><strong><%=currentAccount.money_USD %> USD</strong></p>
+                                        </div>
+                                        <a class="me-btn" href="/USD_VND">USD -> VND</a>
+                                        <li style="margin-left: 74%"><a class="me-btn" href="/transfer">Transfer</a></li>
+                                    </li>
+                                    <li>
+                                        <div class="me-summary-data">
+                                            <p>Account saving</p>
+                                            <p><strong><%=currentAccount.money_save %> VND</strong></p>
+                                        </div>
+                                        <a class="me-btn" href="/withdrawal">Withdrawal</a>
+                                        <% if(account_saving){%>
+                                            <% if(account_saving.check!=true){%>
+                                                <a class="me-btn" href="/loaded_bill">Cancel</a>
+                                                <%- `<li style="color:red">Còn ${time_day} ngày nữa</li>`  %>
+                                            <%}%>
                                         <%}%>
-                                        <% if(account_saving.check!=true){%>
-                                            <a class="me-btn" href="/loaded_bill">Cancel</a>
-                                            <%- `<li style="color:red">Còn ${time_day} ngày nữa</li>`  %>
+                                        <%if(!account_saving){%>
+                                            <a class="me-btn" href="/loaded_views">Loaded</a> 
                                         <%}%>
-                                    <%}%>
-                                    <%if(!account_saving){%>
-                                        <a class="me-btn" href="/loaded_views">Loaded</a>
-                                    <%}%>
-                                </li>
+                                    </li>
+                                <% } %>
                             </ul>
                         </div>
                     </div>
@@ -321,11 +363,11 @@ Purchase:
                 <form action="/customer_update_user" method="post">
                     <div class="me-login-form">
                         <li >Current password</li>
-                        <input type="password" id="current_password" name="current_password"/>
+                        <input type="password" id="current_password" name="current_password" required>
                         <li >Password</li>
-                        <input type="password" id="password" name="password"/>
+                        <input type="password" id="password" name="password" required>
                         <li >Confirm password</li>
-                        <input type="password" id="confirm_password" name="confirm_password"/>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
                         <div class="form-group">
                             <% if(errors || errors.length){ %>
                             <% errors.forEach(item=>{%>
@@ -334,7 +376,7 @@ Purchase:
                             <%}%>
                         </div>                      
                         <div class="me-transaction-load-more">
-                            <button class="me-btn">OK</button>
+                            <input type="submit" class="me-btn" value="OK" style="width: 15px;">
                         </div>
                     </div>
                 </form>
