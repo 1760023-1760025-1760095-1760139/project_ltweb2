@@ -13,7 +13,6 @@ class Transfer extends Model {
     static async findById(id){
         return Transfer.findByPk(id);
     }
-
     //hàm này tìm tất cả email của STK đó
     static async findByEmail(STK_acc){
         Transfer.findAll({
@@ -108,6 +107,31 @@ class Transfer extends Model {
         });
     }
 
+<<<<<<< HEAD
+=======
+    //hàm này kiểm tra 2 acc cùng ngân hàng k và lưu tax của bank đó lại
+    static async check_Bank(id){
+        await Transfer.findOne({
+            where: {
+                id,
+            }
+        }).then(async temp=>{
+            const user_acc = await User.findById(temp.STK_acc);
+            const user_rec = await User.findById(temp.SKT);
+            
+            const bank_acc = await Bank.findByCode(temp.bank);
+
+            if(user_acc.bank==user_rec.bank){
+                temp.tax=bank_acc.same_bank;
+                return temp.save();
+            }
+            else{
+                temp.tax=bank_acc.other_banks
+                return temp.save();     
+        }
+    })};
+
+>>>>>>> 0425a0e27c5e05e977936250a0fe8658967317ce
  };
 
 Transfer.init({
@@ -143,7 +167,8 @@ Transfer.init({
     OTP: {
         type: Sequelize.STRING,
     },
-}, {
+}, 
+   {
     sequelize: db,
     modelName:'transfer',
 });
