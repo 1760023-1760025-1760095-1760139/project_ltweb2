@@ -13,7 +13,6 @@ class Transfer extends Model {
     static async findById(id){
         return Transfer.findByPk(id);
     }
-
     //hàm này tìm tất cả email của STK đó
     static async findByEmail(STK_acc){
         Transfer.findAll({
@@ -142,7 +141,7 @@ class Transfer extends Model {
             }
             else{
                 temp.tax=bank_acc.other_banks
-                return temp.save();
+                return temp.save();     
         }
     })};
 
@@ -179,7 +178,8 @@ Transfer.init({
     OTP: {
         type: Sequelize.STRING,
     },
-}, {
+}, 
+   {
     sequelize: db,
     modelName:'transfer',
 });
