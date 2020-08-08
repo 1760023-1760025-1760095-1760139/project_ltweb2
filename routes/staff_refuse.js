@@ -7,9 +7,6 @@ const router = new Router();
 
 router.get('/',asyncHandler(async function (req,res){
     const user= await User.findById(req.session.id);
-    if(user.update_password!=null){
-        user.update_password=null;
-    }
     user.authentication_check=false;
     user.authentication=crypto.randomBytes(3).toString('hex').toUpperCase();
     user.save();

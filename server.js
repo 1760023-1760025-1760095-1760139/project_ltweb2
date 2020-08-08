@@ -57,6 +57,8 @@ app.use('/USD_VND',require('./routes/USD_VND'));
 app.use('/USD_VND_pass',require('./routes/USD_VND_pass'));
 app.use('/VND_USD',require('./routes/VND_USD'));
 app.use('/VND_USD_pass',require('./routes/VND_USD_pass'));
+app.use('/withdrawal',require('./routes/withdrawal'));
+app.use('/withdrawal_pass',require('./routes/withdrawal_pass'));
 
 app.use('/loaded_views',require('./routes/loaded_views'));
 app.use('/loaded',require('./routes/loaded'));

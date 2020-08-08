@@ -8,6 +8,7 @@ const Account=require('../services/account');
 const Email=require('../services/email');
 const Notification=require('../services/notification');
 const Interest_rate = require('../services/interest_rate');
+const Accept_user = require('../services/accept_user');
 const Account_saving = require('../services/account_saving');
 const router = new Router();
 
@@ -67,7 +68,7 @@ router.post('/',asyncHandler(async function (req,res){
     if(transfer && (req.body.OTP===transfer.OTP)){
         transfer.OTP=null;//xét = null thì ms xuất qua staff
         transfer.save();
-
+ 
         //truy vấn thông tn ng gửi
         const acc= await Account.findById(transfer.STK_acc);
         const user_acc= await User.findById(transfer.STK_acc);
@@ -103,31 +104,13 @@ router.post('/',asyncHandler(async function (req,res){
             var date= today.toISOString();
             var date_name=date.substring(0,10)
             const notification=await Notification.addNotification(user_acc.id,string,date_name);
-
-            //khoản tiền gửi sẽ được cộng vào tk ng nhận
-            acc_rec.money=acc_rec.money+transfer.money;
-            acc_rec.save();
-
-            //gửi email báo số dư cho ng nhận
-            Email.send(user_rec.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa tăng ${transfer.money} VND vào ${transfer.createdAt}. \n
-                Số dư hiện tại: ${acc_rec.money} VND. \n
-                Mô tả: ${transfer.description}. \n
-                Nhận từ số tài hoản ${transfer.STK_acc} của ngân hàng ${bank_acc.Name}. \n
-                Tên người gửi ${user_acc.displayName}.\n
-                Số tiền: ${transfer.money} VND.`);
-
-            string=`Số dư tài khoản vừa tăng ${transfer.money} VND vào ${transfer.createdAt}. \n
-                Số dư hiện tại: ${acc_rec.money} VND. \n
-                Mô tả: ${transfer.description}. \n
-                Nhận từ số tài hoản ${transfer.STK_acc} của ngân hàng ${bank_acc.Name}. \n
-                Tên người gửi ${user_acc.displayName}.\n
-                Số tiền: ${transfer.money} VND.`;
-            notification=await Notification.addNotification(user_rec.id,string,date_name);
+            
+            await Accept_user.addUser_send(transfer.id,transfer.STK_acc,user_acc.displayName,transfer.money,transfer.currency_unit,transfer.STK,user_rec.displayName,bank_rec.code,bank_rec.Name);
 
             delete req.session.idTransfer;
             return res.redirect('/customer');
         }
-        else{
+        if(transfer.currency_unit=="USD"){
             //khoản tiền gửi sẽ bị trừ vào tk ng gửi
             acc.money_USD=acc.money_USD-transfer.money;
             acc.save();
@@ -152,25 +135,7 @@ router.post('/',asyncHandler(async function (req,res){
             var date_name=date.substring(0,10)
             const notification=await Notification.addNotification(user_acc.id,string,date_name);
 
-            //khoản tiền gửi sẽ được cộng vào tk ng nhận
-            acc_rec.money_USD=acc_rec.money_USD+transfer.money;
-            acc_rec.save();
-
-            //gửi email báo số dư cho ng nhận
-            Email.send(user_rec.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa tăng ${transfer.money} USD vào ${transfer.createdAt}. \n
-                Số dư hiện tại: ${acc_rec.money} VND và ${acc_rec.money_USD} USD. \n
-                Mô tả: ${transfer.description}. \n
-                Nhận từ số tài hoản ${transfer.STK_acc} của ngân hàng ${bank_acc.Name}. \n
-                Tên người gửi ${user_acc.displayName}.\n
-                Số tiền: ${transfer.money} USD.`);
-
-            string=`Số dư tài khoản vừa tăng ${transfer.money} USD vào ${transfer.createdAt}. \n
-                Số dư hiện tại: ${acc_rec.money} VND và ${acc_rec.money_USD} USD. \n
-                Mô tả: ${transfer.description}. \n
-                Nhận từ số tài hoản ${transfer.STK_acc} của ngân hàng ${bank_acc.Name}. \n
-                Tên người gửi ${user_acc.displayName}.\n
-                Số tiền: ${transfer.money} USD.`;
-            notification=await Notification.addNotification(user_rec.id,string,date_name);
+            await Accept_user.addUser_send(transfer.id,transfer.STK_acc,user_acc.displayName,transfer.money,transfer.currency_unit,transfer.STK,user_rec.displayName,bank_rec.code,bank_rec.Name);
 
             delete req.session.idTransfer;
             return res.redirect('/customer');

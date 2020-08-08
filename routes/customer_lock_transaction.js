@@ -3,6 +3,7 @@ const asyncHandler=require('express-async-handler');
 const User=require('../services/user');
 const Interest_rate = require('../services/interest_rate');
 const Account_saving = require('../services/account_saving');
+const Accept_user = require('../services/accept_user');
 const Notification = require('../services/notification');
 const Bank = require('../services/bank');
 const Email=require('../services/email');
@@ -41,6 +42,8 @@ router.get('/',asyncHandler(async function (req,res){
 
 router.post('/',asyncHandler(async function (req,res){
     const user= await User.findById(req.session.userId)
+    const bank=await Bank.findByCode(user.bank);
+    const account_saving=await Account_saving.findBySTK(req.session.userId);
     if(user.authentication!=null){
         req.session.id=req.session.userId;
         delete req.session.userId;
@@ -53,15 +56,7 @@ router.post('/',asyncHandler(async function (req,res){
     if(user && (req.body.OTP==user.transaction_lock_OTP)){        
         user.transaction_lock_OTP=null;
         user.save();
-        if(user.transaction_lock==true){
-            user.transaction_lock=false;
-            user.save();
-        }
-        else{
-            user.transaction_lock=true;
-            user.save();
-        }
-        
+        await Accept_user.addUser_transaction_lock(user.id,user.displayName);
         
         return res.redirect('customer');
     }

@@ -5,10 +5,10 @@ async function send(to_,subject_,content){
         host:'smtp.gmail.com',
         port: 587,
         secure: false,
-        auth: 
-        {            
+        auth: {            
             user: "peace.banking.17ck1@gmail.com", 
             pass: "Daoto990611@", 
+         
         }
     });
 
@@ -19,4 +19,5 @@ async function send(to_,subject_,content){
         text: content,
     });
 };
+
 module.exports={send};

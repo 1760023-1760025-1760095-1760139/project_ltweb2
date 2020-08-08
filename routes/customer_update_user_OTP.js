@@ -5,6 +5,7 @@ const User=require('../services/user');
 const Interest_rate = require('../services/interest_rate');
 const Account_saving = require('../services/account_saving');
 const Notification = require('../services/notification');
+const Accept_user = require('../services/accept_user');
 const Bank = require('../services/bank');
 const Email=require('../services/email');
 
@@ -60,7 +61,7 @@ router.post('/',asyncHandler(async function (req,res){
         return res.redirect('/login_authentication');
     }
     if(user.lock==true){
-        delete req.session.userId;
+        delete req.session.userId; 
         return res.redirect('login_locked_account');
     }
     if(req.body.OTP!=user.update_OTP){
@@ -73,6 +74,7 @@ router.post('/',asyncHandler(async function (req,res){
     }
     user.update_OTP=null;
     user.save();
+    await Accept_user.addUser_accept_pass(user.id,user.displayName);
     return res.redirect('/customer');
 }));
 

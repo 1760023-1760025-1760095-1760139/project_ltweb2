@@ -11,10 +11,10 @@ const Bank=require('../services/bank');
 const Model=Sequelize.Model;
 
 class Account_saving extends Model {
-    static async findBySTK(STK){
+    static async findByPk(id){
         return Account_saving.findOne({
             where:{
-                STK,
+                id,
             }
         });
     };
@@ -81,7 +81,7 @@ Account_saving.init({
     },
     check: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        defaultValue: true,
     },
 }, {
     sequelize: db,

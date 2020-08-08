@@ -9,7 +9,7 @@ Purchase:
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!-->
-<html lang="en"> 
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Customer</title>
@@ -55,14 +55,15 @@ Purchase:
             <div class="row">
                 <div class="col-sm-3 col-7">
                     <div class="me-logo">
-                        <a href="/customer"><img src="assets/images/logo.svg" alt="logo" class="img-fluid"/></a>
+                        <a href="/"><img src="assets/images/logo.svg" alt="logo" class="img-fluid"/></a>
                     </div>
                 </div>
                 <div class="col-sm-9 col-5">
                     <div class="me-menu">
                         <ul>
-                            <li><a href="/notification" class="me-active-menu">Notification</a></li>
-                            <li><a href="/customer">Personal Page</a></li>
+                            <li><a href="/staff">Customer information</a></li>
+                            <li><a href="/staff_moneyloaded">Transfer money to customers</a></li>
+                            <li><a href="/staff_accept_transactions" class="me-active-menu">Accept transactions</a></li>
                         </ul>
                         <div class="me-toggle-nav">
                             <span></span>
@@ -75,18 +76,19 @@ Purchase:
             </div>
         </div>
     </div>
+
     <div class="me-transaction me-padder-top-less me-padder-bottom">
         <div class="container">
             <div class="me-heading2">
                 <%- `<h4>${bank_acc.Name}</h4>`  %>
                 <h1>Customer information</h1>
             </div>
-            <form action="/notification" method="post">
-                <div class="me-menu" >
-                    <input type="date" id="date" name="date" style="margin-left: 65%; width: 220px;"/>
-                    <button class="me-btn">OK</button>
-                </div>
-            </form >
+            <div class="me-menu" >
+                <form action="/staff_find" method="post">
+                        <input type="number" placeholder="STK" id="STK" name="STK" style="margin-left: 65%; width: 220px;"/>
+                        <button class="me-btn">OK</button>
+                </form>
+            </div>
             <div class="me-menu">
                 <% if(errors || errors.length){ %>
                 <% errors.forEach(item=>{%>
@@ -102,17 +104,49 @@ Purchase:
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Notification</th>
-                                        <th>Date</th>
+                                        <th>STK</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Accept</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <% if(arr){ %>
                                         <% arr.forEach(x=>{%>
                                             <tr>
-                                            <%- `<td>${i}</td>`  %>
-                                            <%- `<td>${x.notification}</td>`  %>
-                                            <%- `<td>${x.date}</td>`  %>
+                                                <%- `<td>${i}</td>`  %>
+                                                <%- `<td>${x.id}</td>`  %>
+                                                <%- `<td>${x.displayName}</td>`  %>
+                                                <td> 
+                                                    <% if((x.OTP!=null) || (x.authentication!=null) || (x.authentication_check==true)){ %>
+                                                        <%- `<li>Not authenticated</li>`  %>
+                                                        <% } %>
+                                                    <% if(x.lock!=false){ %>
+                                                        <%- `<li>Locked</li>`  %>
+                                                        <% } %>
+                                                    <% if((x.OTP==null) && (x.lock==false) && (x.authentication==null) && (x.authentication_check!=true)){ %>
+                                                        <%- `<li>Verified</li>`  %>
+                                                        <% } %>
+                                                </td>
+                                                <td><%- `<a class="me-btn" href="/update/${x.id}">Update</a>`  %></td>
+                                                <td>
+                                                    <%- `<a class="me-btn" href="/authentication/${x.id}">Authentication</a>`  %>
+                                                    <% if( x.lock!=false || x.authentication!=null || (x.authentication_check==true)){ %>
+                                                        <%- `<a class="me-btn" href="/works_again/${x.id}">Works again</a>`  %>
+                                                    <% } %>
+                                                    <% if(x.lock==false){ %>
+                                                        <%- `<a class="me-btn" href="/locked/${x.id}">Locked</a>`  %>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <% if(x.authentication_check!=false || ((x.update_password!=null) && (x.update_OTP==null)) ){ %>
+                                                        <%- `<a class="me-btn" href="/accept/${x.id}">Accept</a>`  %>
+                                                        <%- `<a class="me-btn" href="/refuse/${x.id}">Refuse</a>`  %>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <%- `<a class="me-btn" href="/information/${x.id}">Information</a>`  %>
+                                                </td>                                            
                                             <%i++%>
                                             </tr>
                                         <%})%>
@@ -211,6 +245,7 @@ Purchase:
         </div>
         </div>
     </div>
+    
 <!-- Footer -->
 <div class="me-footer">
     <div class="container">
@@ -218,7 +253,7 @@ Purchase:
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="me-footer-block">
                     <div class="me-logo">
-                        <a href="/customer"><img src="assets/images/logo.svg" alt="logo" class="img-fluid"/></a>
+                        <a href="/"><img src="assets/images/logo.svg" alt="logo" class="img-fluid"/></a>
                     </div>
                     <ul>
                         <li class="me-footer-emial">peace.banking.17ck1@gmail.com</li>
@@ -274,7 +309,7 @@ Purchase:
         <div class="row">
             <div class="col-lg-6">
                 <div class="me-copyright-block">
-                    <p>&copy; 2020 copyright all right reserved by <a href="/customer">trade coin</a></p>
+                    <p>&copy; 2020 copyright all right reserved by <a href="/">trade coin</a></p>
                 </div>
             </div>
         </div>
@@ -300,6 +335,9 @@ Purchase:
     </p>
 </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="./routes/register"></script>
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
 <script src="assets/js/swiper.min.js"></script>

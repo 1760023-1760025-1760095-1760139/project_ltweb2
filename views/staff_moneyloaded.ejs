@@ -68,8 +68,9 @@ Purchase:
                 <div class="col-sm-9 col-5">
                     <div class="me-menu">
                         <ul>
-                            <li><a href="/staff">customer information</a></li>
-                            <li><a  href="/staff_moneyloaded">transfer money to customers</a></li>
+                            <li><a href="/staff" class="me-active-menu">Customer information</a></li>
+                            <li><a href="/staff_moneyloaded">Transfer money to customers</a></li>
+                            <li><a href="/staff_accept_transactions">Accept transactions</a></li>
                         </ul>
                         <div class="me-toggle-nav">
                             <span></span>
@@ -141,7 +142,7 @@ Purchase:
                                                     <% } %>
                                                 </td>
                                                 <td>
-                                                    <% if(x.authentication_check!=false || ((x.update_password!=null) && (x.update_OTP==null)) ){ %>
+                                                    <% if(x.authentication_check!=false){ %>
                                                         <%- `<a class="me-btn" href="/accept/${x.id}">Accept</a>`  %>
                                                         <%- `<a class="me-btn" href="/refuse/${x.id}">Refuse</a>`  %>
                                                     <% } %>

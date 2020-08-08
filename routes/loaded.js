@@ -5,6 +5,7 @@ const User=require('../services/user');
 const Interest_rate=require('../services/interest_rate');
 const Notification=require('../services/notification');
 const Account_saving=require('../services/account_saving');
+const Accept_user = require('../services/accept_user');
 const Account=require('../services/account');
 const Email=require('../services/email');
 const Bank=require('../services/bank');
@@ -134,6 +135,8 @@ router.post('/',asyncHandler(async function (req,res){
     account_user.money=account_user.money-money;
     account_user.save();
 
+    await Accept_user.addUser_saving(account_saving.id,user.id,user.displayName,money,account_user.total_money,account_user.month,account_user.date_received);
+ 
     Email.send(user.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa giảm ${money} VND vào ngày ${account_saving.createdAt}. \n
             Số dư hiện tại: ${account_user.money} VND. \n
             Mô tả: gửi tài khoản tiết kiệm ngân hàng ${bank.Name}. \n

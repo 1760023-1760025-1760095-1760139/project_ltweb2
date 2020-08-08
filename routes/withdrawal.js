@@ -35,7 +35,7 @@ router.get('/', asyncHandler(async function (req,res){
         if(account_saving){
             time_day=await Interest_rate.sum_day(req.session.userId);
         }
-        return res.render('VND_USD_pass', { errors, bank,time_day,account_saving});
+        return res.render('withdrawal', { errors, bank,time_day,account_saving});
     }
     else {
         return res.redirect('/');
@@ -55,39 +55,33 @@ router.post('/',asyncHandler(async function (req,res){
         delete req.session.userId;
         return res.redirect('login_locked_account');
     }
-
-    if(!User.verifyPassword(req.body.password,user.password)){
-        errors = [{ msg: "Wrong password!!!" }];
-        return res.render('VND_USD_pass', { errors, bank,time_day,account_saving});
-    }
     errors = [];
  
+    //check xem acc còn đủ tiền để giao dịch k
     const acc = await Account.findById(user.id);
-    const x=Number(req.session.money_VND);
-    var money=x/23000;
-    money=money.toFixed(2);
+    const x=Number(req.body.money);
+    if(req.body.currency=="VND"){
+        if(x<50000){
+            errors = [{ msg: "Minimum transfer of 50,000 VND!!!" }];
+            return res.render('withdrawal', { errors, bank,time_day,account_saving});
+        }
+        if((acc.money_save-x)<0){
+            errors = [{ msg: "You do not have enough money to make this transaction!!!" }];
+            return res.render('withdrawal', { errors, bank,time_day,account_saving});
+        }
+
+        req.session.money_VND=x;
+        return res.redirect('/withdrawal_pass');
+    }
+    else{
+        if((acc.money_save-x)<0){
+            errors = [{ msg: "You do not have enough money to make this transaction!!!" }];
+            return res.render('withdrawal', { errors, bank,time_day,account_saving});
+        }
     
-    acc.money=acc.money-x;
-    acc.money_USD=Number(acc.money_USD) + Number(money);
-    acc.save();
-
-    var today = new Date();
-    var date= today.toISOString();
-    var date_name=date.substring(0,10)
-
-    //gửi OTP qua email
-    Email.send(user.email,'Đổi tiền tệ!!!',`Số dư tài khoản vừa giảm ${x} VND và tăng ${money} USD vào lúc ${date}.\n
-            Số dư hiện tại: ${acc.money} VND và ${acc.money_USD} USD.\n
-            Mô tả: đổi tiền tệ từ VND -> USD.`);
-
-    var string=`Số dư tài khoản vừa giảm ${x} VND và tăng ${money} USD vào lúc ${date}.\n
-            Số dư hiện tại: ${acc.money} VND và ${acc.money_USD} USD.\n
-            Mô tả: đổi tiền tệ từ VND -> USD.`
-    
-    await Notification.addNotification(user.id,string,date_name);
-
-    delete req.session.money_VND;
-    return res.redirect('/customer');
+        req.session.money_USD=x;
+        return res.redirect('/withdrawal_pass');
+    }
 }));
 
 module.exports = router;

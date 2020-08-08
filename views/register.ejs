@@ -273,15 +273,15 @@ Purchase:
                 <form action="/register" method="post">
                     <div class="me-login-form">
                         <li>Displayname</li>
-                        <input type="text" placeholder="VD: HOANG NGUYEN DAI" id="displayname" name="displayname"/>
+                        <input type="text" placeholder="VD: HOANG NGUYEN DAI" id="displayname" name="displayname" required>
                         <li>Birthday</li>
-                        <input type="date" placeholder="date of issue" id="birthday" name="birthday"/>
+                        <input type="date" placeholder="date of issue" id="birthday" name="birthday" required>
                         <li>Email</li>
-                        <input type="text" placeholder="asd@gmail.com" id="email" name="email"/>
+                        <input type="text" placeholder="asd@gmail.com" id="email" name="email" required>
                         <li>Password</li>
-                        <input type="password" placeholder="ki tu 8 -> 50" id="password" name="password"/>
+                        <input type="password" placeholder="ki tu 8 -> 50" id="password" name="password" required>
                         <li>Confirm Password</li>
-                        <input type="password" placeholder="ki tu 8 -> 50" id="confirm_password" name="confirm_password"/>
+                        <input type="password" placeholder="ki tu 8 -> 50" id="confirm_password" name="confirm_password" required>
                         <li>Bank</li>
                         <select class="me-btn" id="code" name="code">
                             <% if(bank){ %>
@@ -291,11 +291,11 @@ Purchase:
                             <%}%>
                         </select>
                         <li>SDT</li>
-                        <input type="number" placeholder="10 ki tu" id="sdt" name="sdt"/>
+                        <input type="number" placeholder="10 ki tu" id="sdt" name="sdt" required>
                         <li>Paper type</li>
-                              <input type="file" class="form-date" id="paper_type" name="paper_type">
+                              <input type="file" class="form-date" id="paper_type" name="paper_type" required>
                         <li>Paper Number</li>
-                        <input type="number" placeholder="ki tu 8 -> 20" id="paper_number" name="paper_number"/>
+                        <input type="number" placeholder="ki tu 8 -> 20" id="paper_number" name="paper_number" required>
                         <div class="form-group">
                             <% if(errors || errors.length){ %>
                             <% errors.forEach(item=>{%>
@@ -304,7 +304,7 @@ Purchase:
                             <%}%>
                         </div>                      
                         <div class="me-transaction-load-more">
-                            <button class="me-btn">OK</button>
+                            <input type="submit" class="me-btn" value="OK" style="width: 15px;">
                         </div>
                     </div>
                 </form>

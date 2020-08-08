@@ -8,10 +8,6 @@ const router = new Router();
 
 router.get('/',asyncHandler(async function (req,res){
     const user= await User.findById(req.session.id);
-    if(user.update_password!=null){
-        user.password=user.update_password;
-        user.update_password=null;
-    }
     user.authentication_check=false;
     user.save();
     await Email.send(user.email,'Account của bạn đã được xác thực!!!',`Thành công`);

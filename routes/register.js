@@ -37,12 +37,8 @@ router.get('/', asyncHandler(async function (req,res){
     }
 }));
 
-router.post('/',[    
-    body('displayname')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Displayname!!!'),//k dc trống
+router.post('/',[
     body('email')
-        .notEmpty().withMessage('Khong duoc de trong Email!!!')
         .isEmail().withMessage('Email not verified!!!')//dữ liệu nhập vào có phải là email hay k
         .normalizeEmail()
         .custom(async function(email){
@@ -53,12 +49,8 @@ router.post('/',[
             return true;
         }),
     body('password')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Password!!!')//k dc trống
         .isLength({min:6,max:50}).withMessage('Password Ki tu 6->50!!!'),
     body('confirm_password')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Confirm Password!!!')//k dc trống
         .custom((value, { req }) => {
             if (value != req.body.password) {
                 throw new Error('Confirm password is wrong!!!');
@@ -66,20 +58,9 @@ router.post('/',[
             return true;
         }),
     body('sdt')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong SDT!!!')//k dc trống
         .isLength({min:10,max:10}).withMessage('SDT Ki tu = 10!!!'),
-    body('paper_type')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Paper Type!!!'),//k dc trống
     body('paper_number')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Paper Number!!!')//k dc trống
         .isLength({min:8,max:20}).withMessage('Paper Number Ki tu 8->20!!!'),
-    body('birthday')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Khong duoc de trong Date Of Issue!!!'),//k dc trống
-
 ],asyncHandler(async function (req,res){
     const bank= await Bank.findByAll();
     errors = validationResult(req);

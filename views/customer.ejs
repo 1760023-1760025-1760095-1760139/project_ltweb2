@@ -62,7 +62,7 @@ Purchase:
                     <div class="me-menu">
                         <ul>
                             <li><a href="/notification">Notification</a></li>
-                            <li><a href="/customer">Personal Page</a></li>
+                            <li><a href="/customer" class="me-active-menu">Personal Page</a></li>
                         </ul>
                         <div class="me-toggle-nav">
                             <span></span>
@@ -242,6 +242,9 @@ Purchase:
                                             <% if(account_saving.check!=true){%>
                                                 <a class="me-btn" href="/loaded_bill">Cancel</a>
                                                 <%- `<li style="color:red">Còn ${time_day} ngày nữa</li>`  %>
+                                            <%}%>
+                                            <% if(account_saving.check==true){%>
+                                                <li style="color:red">Đang chờ xử lý...</li>
                                             <%}%>
                                         <%}%>
                                         <%if(!account_saving){%>
