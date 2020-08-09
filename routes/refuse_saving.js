@@ -38,10 +38,10 @@ router.get('/',asyncHandler(async function (req,res){
                 Số tiền: ${accept_user.money} VND.`;
     await Notification.addNotification(user.id,string,date_name);
     
-    await Account.deleteById(user.id);
+    await Account_saving.deleteById(user.id);
     await Accept_user.deleteById(req.session.idSaving);
     delete req.session.idSaving;
     return res.redirect('/staff_accept_transactions');
-}));
+})); 
 
 module.exports = router;

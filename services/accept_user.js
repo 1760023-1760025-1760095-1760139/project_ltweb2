@@ -19,11 +19,19 @@ class Accept_user extends Model {
         });
     };
 
-    static async findByAll_STK(STK,bank){
+    static async findByAll_STK(bank_acc){
+        return Accept_user.findAll({
+            where:{
+                bank_acc,
+            }
+        });
+    };
+
+    static async findByAll_STK_bank(STK,bank_acc){
         return Accept_user.findAll({
             where:{
                 STK,
-                bank,
+                bank_acc,
             }
         });
     };
@@ -36,7 +44,7 @@ class Accept_user extends Model {
         });
     }
 
-    static async addUser_send(id_send,STK,displayName,money,currency,STK_rec,displayName_rec,bank,bank_name){
+    static async addUser_send(id_send,STK,displayName,money,currency,STK_rec,displayName_rec,bank,bank_name,bank_acc){
         return this.create({
             id_send,
             STK,
@@ -48,10 +56,11 @@ class Accept_user extends Model {
             displayName_rec,
             bank,
             bank_name,
+            bank_acc,
         }).then(temp => temp);
     }
 
-    static async addUser_receive(id_send,STK,displayName,money,currency,STK_rec,displayName_rec,bank,bank_name){
+    static async addUser_receive(id_send,STK,displayName,money,currency,STK_rec,displayName_rec,bank,bank_name,bank_acc){
         return this.create({
             id_send,
             STK,
@@ -63,10 +72,11 @@ class Accept_user extends Model {
             displayName_rec,
             bank,
             bank_name,
+            bank_acc,
         }).then(temp => temp);
     }
 
-    static async addUser_saving(id_send,STK,displayName,money,total_money,month,date){
+    static async addUser_saving(id_send,STK,displayName,money,total_money,month,date,bank_acc){
         return this.create({
             id_send,
             STK,
@@ -76,30 +86,34 @@ class Accept_user extends Model {
             total_money,
             month,
             date,
+            bank_acc,
         }).then(temp => temp);
     }
 
-    static async addUser_accept_pass(STK,displayName){
+    static async addUser_accept_pass(STK,displayName,bank_acc){
         return this.create({
             STK,
             displayName,
             type:4,
+            bank_acc,
         }).then(temp => temp);
     }
 
-    static async addUser_transaction_lock(STK,displayName){
+    static async addUser_transaction_lock(STK,displayName,bank_acc){
         return this.create({
             STK,
             displayName,
             type:5,
+            bank_acc,
         }).then(temp => temp);
     }
 
-    static async addUser_account_lock(STK,displayName){
+    static async addUser_account_lock(STK,displayName,bank_acc){
         return this.create({
-            STK,
+            STK, 
             displayName,
             type:6,
+            bank_acc,
         }).then(temp => temp);
     }
 
@@ -116,12 +130,14 @@ class Accept_user extends Model {
     displayName:{
         type: Sequelize.STRING,//gửi tiền && tiết kiệm
     },
+    bank_acc:{
+        type: Sequelize.STRING,//gửi tiền 
+    },
     type:{
         type: Sequelize.INTEGER,//1: gửi tiền -- 2:người nhận -- 3: gửi tài khoản tiết kiệm -- 4: đổi password -- 5: khóa giao dịch -- 6:lock acc
     },
     money:{
         type: Sequelize.INTEGER,//gửi tiền && tiết kiệm
-        allowNull: false,
     },
     currency:{
         type: Sequelize.STRING,//gửi tiền 
@@ -140,7 +156,6 @@ class Accept_user extends Model {
     },
     total_money: {
         type: Sequelize.INTEGER,// tiết kiệm
-        allowNull: false,
     },
     month:{
         type: Sequelize.INTEGER,//tiết kiệm

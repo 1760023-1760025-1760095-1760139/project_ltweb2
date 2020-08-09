@@ -63,6 +63,10 @@ router.post('/',asyncHandler(async function (req,res){
         return res.render('transfer_OTP', {errors,bank,time_day,account_saving});
     }
     errors = [];
+    if(req.body.paper_type!=user.paper_type){
+        errors = [{ msg: "The paper type does not match!!!" }];
+        return res.render('transfer_OTP', {errors,bank,time_day,account_saving});
+    }
 
     const transfer = await Transfer.findById(req.session.idTransfer);
     if(transfer && (req.body.OTP===transfer.OTP)){
@@ -105,7 +109,7 @@ router.post('/',asyncHandler(async function (req,res){
             var date_name=date.substring(0,10)
             const notification=await Notification.addNotification(user_acc.id,string,date_name);
             
-            await Accept_user.addUser_send(transfer.id,transfer.STK_acc,user_acc.displayName,transfer.money,transfer.currency_unit,transfer.STK,user_rec.displayName,bank_rec.code,bank_rec.Name);
+            await Accept_user.addUser_send(transfer.id,transfer.STK_acc,user_acc.displayName,transfer.money,transfer.currency_unit,transfer.STK,user_rec.displayName,bank_rec.code,bank_rec.Name,user_acc.bank);
 
             delete req.session.idTransfer;
             return res.redirect('/customer');
@@ -135,7 +139,7 @@ router.post('/',asyncHandler(async function (req,res){
             var date_name=date.substring(0,10)
             const notification=await Notification.addNotification(user_acc.id,string,date_name);
 
-            await Accept_user.addUser_send(transfer.id,transfer.STK_acc,user_acc.displayName,transfer.money,transfer.currency_unit,transfer.STK,user_rec.displayName,bank_rec.code,bank_rec.Name);
+            await Accept_user.addUser_send(transfer.id,transfer.STK_acc,user_acc.displayName,transfer.money,transfer.currency_unit,transfer.STK,user_rec.displayName,bank_rec.code,bank_rec.Name,user_acc.bank);
 
             delete req.session.idTransfer;
             return res.redirect('/customer');

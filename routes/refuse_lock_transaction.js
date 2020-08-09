@@ -11,6 +11,7 @@ router.get('/',asyncHandler(async function (req,res){
     const accept_user=await Accept_user.findByPk(req.session.lock_transaction);
 
     const user=await User.findById(accept_user.STK);
+    const bank= await Bank.findByCode(user.bank);
     var today = new Date();
     var date= today.toISOString();
     var date_name=date.substring(0,10)

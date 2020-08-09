@@ -56,7 +56,7 @@ router.get('/',asyncHandler(async function (req,res){
             delete req.session.idSend;
             return res.redirect('/staff_accept_transactions');
         }
-        await Accept_user.addUser_receive(transfer.id,transfer.STK,user_rec.displayName,transfer.money,transfer.currency_unit,transfer.STK_acc,user_acc.displayName,bank_acc.code,bank_acc.Name);
+        await Accept_user.addUser_receive(transfer.id,transfer.STK,user_rec.displayName,transfer.money,transfer.currency_unit,transfer.STK_acc,user_acc.displayName,bank_acc.code,bank_acc.Name,user_rec.bank);
         await Accept_user.deleteById(req.session.idSend);
         delete req.session.idSend;
         return res.redirect('/staff_accept_transactions');
@@ -89,7 +89,7 @@ router.get('/',asyncHandler(async function (req,res){
             delete req.session.idSend;
             return res.redirect('/staff_accept_transactions');
         }
-        await Accept_user.addUser_receive(transfer.id,transfer.STK,user_rec.displayName,transfer.money,transfer.currency_unit,transfer.STK_acc,user_acc.displayName,bank_acc.code,bank_acc.Name);
+        await Accept_user.addUser_receive(transfer.id,transfer.STK,user_rec.displayName,transfer.money,transfer.currency_unit,transfer.STK_acc,user_acc.displayName,bank_acc.code,bank_acc.Name,user_rec.bank);
         await Accept_user.deleteById(req.session.idSend);
         delete req.session.idSend;
         return res.redirect('/staff_accept_transactions');

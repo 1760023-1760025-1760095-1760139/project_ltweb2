@@ -135,7 +135,7 @@ router.post('/',asyncHandler(async function (req,res){
     account_user.money=account_user.money-money;
     account_user.save();
 
-    await Accept_user.addUser_saving(account_saving.id,user.id,user.displayName,money,account_user.total_money,account_user.month,account_user.date_received);
+    await Accept_user.addUser_saving(account_saving.id,account_saving.STK,user.displayName,account_saving.money,account_saving.total_money,account_saving.month,account_saving.date_received,user.bank);
  
     Email.send(user.email,'Thay đổi số dư tài khoản',`Số dư tài khoản vừa giảm ${money} VND vào ngày ${account_saving.createdAt}. \n
             Số dư hiện tại: ${account_user.money} VND. \n

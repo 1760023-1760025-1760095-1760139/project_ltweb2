@@ -35,15 +35,15 @@ class Account_saving extends Model {
         });
     }
 
-    static async addAccount_saving(STK,month,sent_date,date_received,rate,money,money_rate,total_money){
+    static async addAccount_saving(STK,month,sent_date,date_received,rate,money_rate,money,total_money){
         return this.create({
             STK,
             month,
             sent_date,
             date_received,
             rate,
-            money,
             money_rate,
+            money,
             total_money,
         }).then(temp => temp);
     }

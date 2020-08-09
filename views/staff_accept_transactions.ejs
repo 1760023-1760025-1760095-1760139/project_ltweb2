@@ -81,12 +81,12 @@ Purchase:
         <div class="container">
             <div class="me-heading2">
                 <%- `<h4>${bank_acc.Name}</h4>`  %>
-                <h1>Customer information</h1>
+                <h1>Accept transactions</h1>
             </div>
             <div class="me-menu" >
-                <form action="/staff_find" method="post">
-                        <input type="number" placeholder="STK" id="STK" name="STK" style="margin-left: 65%; width: 220px;"/>
-                        <button class="me-btn">OK</button>
+                <form action="/staff_accept_transactions" method="post">
+                        <input type="number" placeholder="STK" id="STK" name="STK" style="margin-left: 65%; width: 220px;" required>
+                        <input type="submit" class="me-btn" value="Login" style="width: 15px;">
                 </form>
             </div>
             <div class="me-menu">
@@ -115,38 +115,54 @@ Purchase:
                                         <% arr.forEach(x=>{%>
                                             <tr>
                                                 <%- `<td>${i}</td>`  %>
-                                                <%- `<td>${x.id}</td>`  %>
+                                                <%- `<td>${x.STK}</td>`  %>
                                                 <%- `<td>${x.displayName}</td>`  %>
                                                 <td> 
-                                                    <% if((x.OTP!=null) || (x.authentication!=null) || (x.authentication_check==true)){ %>
-                                                        <%- `<li>Not authenticated</li>`  %>
-                                                        <% } %>
-                                                    <% if(x.lock!=false){ %>
-                                                        <%- `<li>Locked</li>`  %>
-                                                        <% } %>
-                                                    <% if((x.OTP==null) && (x.lock==false) && (x.authentication==null) && (x.authentication_check!=true)){ %>
-                                                        <%- `<li>Verified</li>`  %>
-                                                        <% } %>
-                                                </td>
-                                                <td><%- `<a class="me-btn" href="/update/${x.id}">Update</a>`  %></td>
-                                                <td>
-                                                    <%- `<a class="me-btn" href="/authentication/${x.id}">Authentication</a>`  %>
-                                                    <% if( x.lock!=false || x.authentication!=null || (x.authentication_check==true)){ %>
-                                                        <%- `<a class="me-btn" href="/works_again/${x.id}">Works again</a>`  %>
-                                                    <% } %>
-                                                    <% if(x.lock==false){ %>
-                                                        <%- `<a class="me-btn" href="/locked/${x.id}">Locked</a>`  %>
-                                                    <% } %>
-                                                </td>
-                                                <td>
-                                                    <% if(x.authentication_check!=false || ((x.update_password!=null) && (x.update_OTP==null)) ){ %>
-                                                        <%- `<a class="me-btn" href="/accept/${x.id}">Accept</a>`  %>
-                                                        <%- `<a class="me-btn" href="/refuse/${x.id}">Refuse</a>`  %>
-                                                    <% } %>
+                                                    <% if(x.type==1){%>
+                                                        <%- `<li>Chuyển ${x.money} ${x.currency} - Cho STK ${x.STK_rec} - Ngân hàng ${x.bank_name} - Tên người nhận ${x.displayName_rec} - Được gửi vào ngày ${x.createdAt}.</li>` %>
+                                                    <%}%>
+                                                    <% if(x.type==2){%>
+                                                        <%- `<li>Nhận ${x.money} ${x.currency} - Từ STK ${x.STK_rec} - Ngân hàng ${x.bank_name} - Tên người gửi ${x.displayName_rec} - Được gửi vào ngày ${x.createdAt}.</li>` %>
+                                                    <%}%>
+                                                    <% if(x.type==3){%>
+                                                        <%- `<li>Gửi tiền tiết kiệm số tiền là ${x.money} VND - Gửi ${x.month} tháng - Hẹn ngày ${x.date} - tổng tiền lãi và gốc khi tới ngày hẹn ${x.total_money} - Được gửi vào ngày ${x.createdAt}.</li>` %>
+                                                    <%}%>
+                                                    <% if(x.type==4){%>
+                                                        <%- `<li>Yêu cầu đổi mật khẩu mới - Được gửi vào ngày ${x.createdAt}.</li>` %>
+                                                    <%}%>
+                                                    <% if(x.type==5){%>
+                                                        <%- `<li> -Yêu cầu khóa giao dịch - Được gửi vào ngày ${x.createdAt}.</li>` %>
+                                                    <%}%>
+                                                    <% if(x.type==6){%>
+                                                        <%- `<li> -Yêu cầu khóa tài khoản - Được gửi vào ngày ${x.createdAt}.</li>` %>
+                                                    <%}%>
                                                 </td>
                                                 <td>
-                                                    <%- `<a class="me-btn" href="/information/${x.id}">Information</a>`  %>
-                                                </td>                                            
+                                                    <% if(x.type==1){%>
+                                                        <%- `<a class="me-btn" href="/accept_send/${x.id}">Accept</a>`  %>
+                                                        <%- `<a class="me-btn" href="/refuse_send/${x.id}">Refuse</a>`  %>
+                                                    <%}%>
+                                                    <% if(x.type==2){%>
+                                                        <%- `<a class="me-btn" href="/accept_receive/${x.id}">Accept</a>`  %>
+                                                        <%- `<a class="me-btn" href="/refuse_receive/${x.id}">Refuse</a>`  %>
+                                                    <%}%>
+                                                    <% if(x.type==3){%>
+                                                        <%- `<a class="me-btn" href="/accept_saving/${x.id}">Accept</a>`  %>
+                                                        <%- `<a class="me-btn" href="/refuse_saving/${x.id}">Refuse</a>`  %>
+                                                    <%}%>
+                                                    <% if(x.type==4){%>
+                                                        <%- `<a class="me-btn" href="/accept_password/${x.id}">Accept</a>`  %>
+                                                        <%- `<a class="me-btn" href="/refuse_password/${x.id}">Refuse</a>`  %>
+                                                    <%}%>
+                                                    <% if(x.type==5){%>
+                                                        <%- `<a class="me-btn" href="/accept_lock_transaction/${x.id}">Accept</a>`  %>
+                                                        <%- `<a class="me-btn" href="/refuse_lock_transaction/${x.id}">Refuse</a>`  %>
+                                                    <%}%>
+                                                    <% if(x.type==6){%>
+                                                        <%- `<a class="me-btn" href="/accept_lock_account/${x.id}">Accept</a>`  %>
+                                                        <%- `<a class="me-btn" href="/refuse_lock_account/${x.id}">Refuse</a>`  %>
+                                                    <%}%>
+                                                </td>                                           
                                             <%i++%>
                                             </tr>
                                         <%})%>

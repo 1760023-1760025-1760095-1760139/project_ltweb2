@@ -24,11 +24,7 @@ router.get('/',asyncHandler(async function (req,res){
     }
 }));
 
-router.post('/',[
-    body('STK')
-        .trim()//khi load lại nó sẽ làm ms
-        .notEmpty().withMessage('Không được để trống STK!!!'),
-],asyncHandler(async function (req,res){
+router.post('/',asyncHandler(async function (req,res){
     i=1;
     req.session.id=req.body.STK;
     const user= await User.findById(req.session.userId)

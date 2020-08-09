@@ -52,10 +52,14 @@ router.post('/',asyncHandler(async function (req,res){
         delete req.session.userId;
         return res.redirect('login_locked_account');
     }
+    if(req.body.paper_type!=user.paper_type){
+        errors = [{ msg: "The paper type does not match!!!" }];
+        return res.render('customer_lock_account',{errors,bank,time_day,account_saving});
+    }
     if(user && (req.body.OTP==user.lock_OTP)){        
         user.lock_OTP=null;
         user.save();
-        await Accept_user.addUser_account_lock(user.id,user.displayName);
+        await Accept_user.addUser_account_lock(user.id,user.displayName,user.bank);
         return res.redirect('customer');
     }
     errors = [{ msg: "Invalided OTP code !!!" }];
