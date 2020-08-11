@@ -25,7 +25,7 @@ router.get('/', asyncHandler(async function (req,res){
     }
 }));
 
-router.post('/',asyncHandler(async function (req,res){
+router.post('/', asyncHandler(async function (req,res){
     errors = validationResult(req);
     if (!errors.isEmpty()) {
         errors = errors.array();
@@ -33,7 +33,7 @@ router.post('/',asyncHandler(async function (req,res){
     }
     const user = await User.findById(req.session.id);
     if(req.body.OTP!=user.authentication){
-        errors = [{ msg: "Invalided OTP code !!!" }];
+        errors = [{ msg: "Invalided OTP code !!! " }];
         return res.render('login_authentication', { errors });
     }
     if(req.body.paper_type!=user.paper_type){
