@@ -8,6 +8,7 @@ const router = new Router();
 
 var errors=[];
 var i=1;
+
 router.get('/',asyncHandler(async function (req,res){
     i=1;
     const user= await User.findById(req.session.userId)
@@ -37,7 +38,7 @@ router.post('/',asyncHandler(async function (req,res){
     errors = [];
     i=1;
     const user_rec=await User.findById(req.body.STK);
-    if(!user_rec|| (user_rec.bank!=user.bank) || (user_rec.staff!=false)){
+    if(!user_rec || (user_rec.bank!=user.bank) || (user_rec.staff!=false)){
         errors = [{ msg: "User information could not be found!!!" }];
         return res.render('staff_accept_transactions', { errors, arr, i,bank_acc});
     }
