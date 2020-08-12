@@ -3,7 +3,8 @@ const interest_rate=require('../services/interest_rate');
 const User=require('../services/user');
 const asyncHandler=require('express-async-handler');
 
-module.exports= asyncHandler(async function auth(req,res,next){
+module.exports= asyncHandler(async function auth(req,res,next)
+{
     User.create({
         email:'hoangdai@gmail.com',
         displayName: ('hoang nguyen dai').toUpperCase(),
