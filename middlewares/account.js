@@ -1,7 +1,8 @@
 const Account=require('../services/account');
 const asyncHandler=require('express-async-handler');
 
-module.exports= asyncHandler(async function auth(req,res,next){
+module.exports= asyncHandler(async function auth(req,res,next)
+{
     const userId=req.session.userId;
     res.locals.currentAccount=null;
     if(!userId){
