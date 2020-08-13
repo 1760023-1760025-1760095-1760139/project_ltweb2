@@ -1,7 +1,6 @@
 const bcrypt=require('bcrypt');
 const db=require('./db');
 const Sequelize=require('sequelize');
-
 const Model=Sequelize.Model;
 
 class Bank extends Model {
