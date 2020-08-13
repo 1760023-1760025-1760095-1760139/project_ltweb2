@@ -3,7 +3,6 @@ const db=require('./db');
 const Sequelize=require('sequelize');
 const User=require('../services/user');
 const Bank=require('../services/bank');
-
 const Model=Sequelize.Model;
 
 class Account extends Model {
@@ -11,7 +10,7 @@ class Account extends Model {
         return Account.findByPk(id);
     }
 
-    //hàm này check xem acc_bank của ng gửi có đủ số tiền đó để gửi hay k
+    //hàm này check xem acc_bank của ng gửi có đủ số tiền đó để gửi hay hk
     static async check_money_Bank(STK_acc,STK,money){
         const x=Number(money);
         const user_acc= await User.findById(STK_acc);
@@ -57,6 +56,5 @@ Account.init({
     sequelize: db,
     modelName:'account',
 });
-
 
 module.exports= Account;
