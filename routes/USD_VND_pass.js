@@ -62,11 +62,11 @@ router.post('/',asyncHandler(async function (req,res){
     }
     errors = [];
  
-    //check xem acc còn đủ tiền để giao dịch hk
+    //check xem acc còn đủ tiền để giao dịch k
     const acc = await Account.findById(user.id);
-    const x = Number(req.session.money_USD);
-    const money = x * 22500;
-    if((acc.money_USD-x) < 0) {
+    const x=Number(req.session.money_USD);
+    const money=x*22500;
+    if((acc.money_USD-x)<0){
         errors = [{ msg: "You do not have enough money to make this transaction!!!" }];
         return res.render('USD_VND_pass', { errors, bank,time_day,account_saving});
     }

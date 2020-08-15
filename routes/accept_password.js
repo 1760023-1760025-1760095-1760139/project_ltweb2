@@ -7,8 +7,7 @@ const Notification=require('../services/notification');
 const Accept_user = require('../services/accept_user');
 const router = new Router();
  
-router.get('/',asyncHandler(async function (req,res)
-{
+router.get('/',asyncHandler(async function (req,res){
     const accept_user=await Accept_user.findByPk(req.session.password);
 
     const user=await User.findById(accept_user.STK);

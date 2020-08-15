@@ -31,7 +31,7 @@ router.post('/',[
             return true;
         }),
     body('password')
-        .isLength({min:6,max:50}).withMessage('Kí tự Password 6->50!!!'),
+        .isLength({min:6,max:50}).withMessage('Ki tu Password 6->50!!!'),
 ],asyncHandler(async function (req,res){
     errors = validationResult(req);
     if (!errors.isEmpty()) {

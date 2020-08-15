@@ -9,8 +9,15 @@ class User extends Model {
         return User.findByPk(id);
     }
 
-    static async findByEmail(email)
-    {
+    static async deleteById(id){
+        return User.destroy({
+            where:{
+                id,
+            }
+        });
+    }
+
+    static async findByEmail(email){
         return User.findOne({
             where: {
                 email,
@@ -18,8 +25,7 @@ class User extends Model {
         });
     } 
 
-    static async findBySTK_Bank(id,bank,staff)
-    {
+    static async findBySTK_Bank(id,bank,staff){
         return User.findOne({
             where: {
                 id,
@@ -28,8 +34,8 @@ class User extends Model {
             }
         });
     }
-    static async findByAll_STK_Bank(bank,staff)
-    {
+
+    static async findByAll_STK_Bank(bank,staff){
         return User.findAll({
             where: {
                 bank,
@@ -116,4 +122,6 @@ User.init({
     sequelize: db,
     modelName:'user',
 });
+
+
 module.exports= User;

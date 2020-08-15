@@ -117,6 +117,15 @@ class Accept_user extends Model {
         }).then(temp => temp);
     }
 
+    static async addUser(STK,displayName,bank_acc){
+        return this.create({
+            STK,
+            displayName,
+            type:7,
+            bank_acc,
+        }).then(temp => temp);
+    }
+
  };
  
  Accept_user.init({
@@ -134,7 +143,7 @@ class Accept_user extends Model {
         type: Sequelize.STRING,//gửi tiền 
     },
     type:{
-        type: Sequelize.INTEGER,//1: gửi tiền -- 2:người nhận -- 3: gửi tài khoản tiết kiệm -- 4: đổi password -- 5: khóa giao dịch -- 6:lock acc
+        type: Sequelize.INTEGER,//1: gửi tiền -- 2:người nhận -- 3: gửi tài khoản tiết kiệm -- 4: đổi password -- 5: khóa giao dịch -- 6:lock acc -- 7:accept đăng kí tài khoản
     },
     money:{
         type: Sequelize.INTEGER,//gửi tiền && tiết kiệm

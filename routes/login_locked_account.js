@@ -4,7 +4,6 @@ const asyncHandler=require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 
 const router = new Router();
-
 router.get('/login_locked_account', asyncHandler(async function (req,res){
     const user= await User.findById(req.session.userId);
     if(req.session.userId){

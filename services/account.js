@@ -3,19 +3,16 @@ const db=require('./db');
 const Sequelize=require('sequelize');
 const User=require('../services/user');
 const Bank=require('../services/bank');
+
 const Model=Sequelize.Model;
 
-
-class Account extends Model 
-{
-    static async findById(id)
-    {
+class Account extends Model {
+    static async findById(id){
         return Account.findByPk(id);
     }
 
-    //hàm này check xem acc_bank của ng gửi có đủ số tiền đó để gửi hay hk
-    static async check_money_Bank(STK_acc,STK,money)
-    {
+    //hàm này check xem acc_bank của ng gửi có đủ số tiền đó để gửi hay k
+    static async check_money_Bank(STK_acc,STK,money){
         const x=Number(money);
         const user_acc= await User.findById(STK_acc);
         const user_rec= await User.findById(STK);

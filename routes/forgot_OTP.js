@@ -6,6 +6,7 @@ const User=require('../services/user');
 const Email=require('../services/email');
 
 const router = new Router();
+
 var errors=[];
 
 router.get('/', asyncHandler(async function (req,res){

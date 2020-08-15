@@ -14,8 +14,7 @@ const router = new Router();
 var errors=[];
 var time_day=0;
 
-router.get('/', asyncHandler(async function (req,res)
-{
+router.get('/', asyncHandler(async function (req,res){
     const user= await User.findById(req.session.userId)
     const bank=await Bank.findByCode(user.bank);
     const account_saving=await Account_saving.findBySTK(req.session.userId);
@@ -58,7 +57,7 @@ router.post('/',asyncHandler(async function (req,res){
     }
     errors = [];
  
-    //check xem acc còn đủ tiền để giao dịch hk
+    //check xem acc còn đủ tiền để giao dịch k
     const acc = await Account.findById(user.id);
     const x=Number(req.body.money);
     if(x<50000){

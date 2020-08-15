@@ -77,12 +77,14 @@ app.use('/accept_saving',require('./routes/accept_saving'));
 app.use('/accept_password',require('./routes/accept_password'));
 app.use('/accept_lock_transaction',require('./routes/accept_lock_transaction'));
 app.use('/accept_lock_account',require('./routes/accept_lock_account'));
+app.use('/accept_user',require('./routes/accept_user'));
 app.use('/refuse_send',require('./routes/refuse_send'));
 app.use('/refuse_receive',require('./routes/refuse_receive'));
 app.use('/refuse_saving',require('./routes/refuse_saving'));
 app.use('/refuse_password',require('./routes/refuse_password'));
 app.use('/refuse_lock_transaction',require('./routes/refuse_lock_transaction'));
 app.use('/refuse_lock_account',require('./routes/refuse_lock_account'));
+app.use('/refuse_user',require('./routes/refuse_user'));
 
 app.use('/update',require('./routes/staff_update'));
 app.use('/authentication',require('./routes/staff_authentication'));

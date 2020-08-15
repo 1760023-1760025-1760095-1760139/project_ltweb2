@@ -9,11 +9,11 @@ const router = new Router();
  
 router.get('/',asyncHandler(async function (req,res){
     const accept_user=await Accept_user.findByPk(req.session.lock_account);
+
     const user=await User.findById(accept_user.STK);
     const bank= await Bank.findByCode(user.bank);
     user.lock=true;
     user.save();
- 
     var today = new Date();
     var date= today.toISOString();
     var date_name=date.substring(0,10)

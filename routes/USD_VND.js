@@ -19,8 +19,7 @@ router.get('/', asyncHandler(async function (req,res){
     const bank=await Bank.findByCode(user.bank);
     const account_saving=await Account_saving.findBySTK(req.session.userId);
 
-    if(req.session.userId)
-    {
+    if(req.session.userId){
         if(user.staff==true){
             return res.redirect('/staff');
         }
@@ -58,7 +57,7 @@ router.post('/',asyncHandler(async function (req,res){
     }
     errors = [];
  
-    //check xem acc còn đủ tiền để giao dịch hk
+    //check xem acc còn đủ tiền để giao dịch k
     const acc = await Account.findById(user.id);
     const x=Number(req.body.money);
     if((acc.money_USD-x)<0){

@@ -55,7 +55,12 @@ Purchase:
             <div class="row">
                 <div class="col-sm-3 col-7">
                     <div class="me-logo">
-                        <a href="/customer"><img src="assets/images/logo.svg" alt="logo" class="img-fluid"/></a>
+                        <% if(currentUser.bank=='ACB'){ %>
+                            <a href="/customer"><img src="https://scontent.fsgn2-1.fna.fbcdn.net/v/t1.15752-9/102287511_1740738822733934_8490192992860536777_n.jpg?_nc_cat=105&_nc_sid=b96e70&_nc_ohc=6xrLG8PyCicAX-EhLnh&_nc_ht=scontent.fsgn2-1.fna&oh=0903deb23e07c7c5defd37c19a64d160&oe=5F5C7BB9" alt="logo" class="img-fluid"/></a>
+                        <%}%>
+                        <% if(currentUser.bank=='Agribank'){ %>
+                            <a href="/customer"><img src="https://scontent.fsgn2-2.fna.fbcdn.net/v/t1.15752-9/117340134_1015287195593551_7921453655484849756_n.png?_nc_cat=103&_nc_sid=b96e70&_nc_ohc=KWHujQU2sFcAX-LVWP6&_nc_ht=scontent.fsgn2-2.fna&oh=694ecf5ff9df58742a7068d6e62d55b1&oe=5F5D4F99" alt="logo" class="img-fluid"/></a>
+                        <%}%>
                     </div>
                 </div>
                 <div class="col-sm-9 col-5">
@@ -289,7 +294,12 @@ Purchase:
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="me-footer-block">
                     <div class="me-logo">
-                        <a href="/customer"><img src="assets/images/logo.svg" alt="logo" class="img-fluid"/></a>
+                        <% if(currentUser.bank=='ACB'){ %>
+                            <a href="/customer"><img src="https://scontent.fsgn2-1.fna.fbcdn.net/v/t1.15752-9/102287511_1740738822733934_8490192992860536777_n.jpg?_nc_cat=105&_nc_sid=b96e70&_nc_ohc=6xrLG8PyCicAX-EhLnh&_nc_ht=scontent.fsgn2-1.fna&oh=0903deb23e07c7c5defd37c19a64d160&oe=5F5C7BB9" alt="logo" class="img-fluid"/></a>
+                        <%}%>
+                        <% if(currentUser.bank=='Agribank'){ %>
+                            <a href="/customer"><img src="https://scontent.fsgn2-2.fna.fbcdn.net/v/t1.15752-9/117340134_1015287195593551_7921453655484849756_n.png?_nc_cat=103&_nc_sid=b96e70&_nc_ohc=KWHujQU2sFcAX-LVWP6&_nc_ht=scontent.fsgn2-2.fna&oh=694ecf5ff9df58742a7068d6e62d55b1&oe=5F5D4F99" alt="logo" class="img-fluid"/></a>
+                        <%}%>
                     </div>
                     <ul>
                         <li class="me-footer-emial">peace.banking.17ck1@gmail.com</li>
@@ -345,7 +355,7 @@ Purchase:
         <div class="row">
             <div class="col-lg-6">
                 <div class="me-copyright-block">
-                    <p>&copy; 2020 copyright all right reserved by <a href="/customer">trade coin</a></p>
+                    <p>&copy; 2020 copyright all right reserved by <a href="/customer">Internet Banking</a></p>
                 </div>
             </div>
         </div>

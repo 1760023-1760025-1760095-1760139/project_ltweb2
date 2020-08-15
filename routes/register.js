@@ -5,6 +5,7 @@ const crypto=require('crypto');
 const User=require('../services/user');
 const Account=require('../services/account');
 const Bank=require('../services/bank');
+const Accept_user = require('../services/accept_user');
 const Email=require('../services/email');
 
 const path = require('path');
@@ -88,8 +89,8 @@ router.post('/',[
         money_USD:0,
         money_save:0,
     })
+    await Accept_user.addUser(user.id,user.displayName,user.bank);
 
-    await Email.send(user.email,'Mã kích hoạt tài khoản',`http://localhost:3000/${user.id}/${user.OTP}`); //khi chạy trên cmd gõ BASE_URL= http://locahost:3000 mình dùng trc start npm
     return res.render('login_not_activated');
 }));
 module.exports = router;
