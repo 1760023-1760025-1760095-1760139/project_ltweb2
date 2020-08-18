@@ -8,6 +8,11 @@ const router = new Router();
 var errors = [];
 router.get('/', asyncHandler(async function (req,res){
     const user= await User.findById(req.session.userId);
+    var notification=0;
+    if(req.session.notification){
+        notification=req.session.notification;
+        delete req.session.notification;
+    }
     if(req.session.userId){
         if(user.staff==true){
             return res.redirect('/staff');
@@ -15,7 +20,7 @@ router.get('/', asyncHandler(async function (req,res){
         return res.redirect('/customer');
     }
     else {
-        return res.render('login',{errors});
+        return res.render('login',{errors,notification});
     }
 }));
 
@@ -34,16 +39,17 @@ router.post('/',[
         .isLength({min:6,max:50}).withMessage('Ki tu Password 6->50!!!'),
 ],asyncHandler(async function (req,res){
     errors = validationResult(req);
+    var notification=0;
     if (!errors.isEmpty()) {
         errors = errors.array();
-        return res.render('login', {errors});
+        return res.render('login', {errors,notification});
     }
     errors = [];
     const user = await User.findByEmail(req.body.email);
 
     if(!User.verifyPassword(req.body.password,user.password)){
         errors = [{ msg: "Wrong Password!!!" }];
-        return res.render('login', { errors });
+        return res.render('login', { errors ,notification});
     }
     if(user.lock==true){
         return res.render('login_locked_account');
@@ -62,6 +68,7 @@ router.post('/',[
     if(user.staff==true){
         return res.redirect('/staff');
     }
+    req.session.notification=9;
     return res.redirect('/customer');
 }));
 

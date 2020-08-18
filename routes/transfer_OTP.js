@@ -112,6 +112,7 @@ router.post('/',asyncHandler(async function (req,res){
             await Accept_user.addUser_send(transfer.id,transfer.STK_acc,user_acc.displayName,transfer.money,transfer.currency_unit,transfer.STK,user_rec.displayName,bank_rec.code,bank_rec.Name,user_acc.bank);
 
             delete req.session.idTransfer;
+            req.session.notification=7;
             return res.redirect('/customer');
         }
         if(transfer.currency_unit=="USD"){
@@ -142,6 +143,7 @@ router.post('/',asyncHandler(async function (req,res){
             await Accept_user.addUser_send(transfer.id,transfer.STK_acc,user_acc.displayName,transfer.money,transfer.currency_unit,transfer.STK,user_rec.displayName,bank_rec.code,bank_rec.Name,user_acc.bank);
 
             delete req.session.idTransfer;
+            req.session.notification=7;
             return res.redirect('/customer');
         }        
     }

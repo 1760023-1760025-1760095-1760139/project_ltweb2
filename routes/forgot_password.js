@@ -72,6 +72,7 @@ router.post('/',[
     user.save();
 
     delete req.session.email;
+    req.session.notification=2;
     return res.redirect('/');
 }));
 

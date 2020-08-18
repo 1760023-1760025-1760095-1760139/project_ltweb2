@@ -23,6 +23,13 @@ Purchase:
     <link rel="stylesheet" type="text/css" href="assets/css/swiper.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link rel="icon" type="image/png" href="assets/images/fav.png"/>
+    <% if(notification==1){ %>
+        <script>
+            $(document).ready(function(){
+                alert("Nạp tền vào tài khoản Customer thành công!!!");
+            });
+        </script>
+    <% } %>
 </head>
 <body>
 <div class="me-main-wraper">
@@ -91,7 +98,7 @@ Purchase:
             <div class="me-menu" >
                 <form action="/staff_find" method="post">
                     <input type="number" placeholder="STK" id="STK" name="STK" style="margin-left: 65%; width: 220px;" required>
-                    <input type="submit" class="me-btn" value="Login" style="width: 15px;">
+                    <input type="submit" class="me-btn" value="OK" style="width: 15px;">
                 </form>
             </div>
             <div class="me-menu">

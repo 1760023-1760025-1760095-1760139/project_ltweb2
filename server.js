@@ -1,13 +1,11 @@
 const express=require("express");
 const bodyParser = require('body-parser');
 const app =express();
+const User=require('./services/user');
 const PORT = process.env.PORT || 3000;
 var server=require('http').createServer(app);
 var io = require('socket.io').listen(server);
 const db=require('./services/db')
-const Bank=require('./services/bank');
-const interest_rate=require('./services/interest_rate');
-const User=require('./services/user');
 const cookieSession=require('cookie-session');
 //app.listen(process.env.PORT || 3000);
 
@@ -96,20 +94,17 @@ app.use('/information',require('./routes/staff_information'));
 
 app.get('/logout',require('./routes/logout'));
 
-
-io.on('connection', (socket) => {
-    socket.on("transfer_OTP", data => {
-
-        socket.id = data.id;
-        users.push(socket.id);
-        console.log(data);
-    });
-
-    socket.on("staff_moneyloaded", data => {
-
-        socket.id = data.id;
-        users.push(socket.id);
-        console.log(data);
+var string="";
+io.on('connection', function(socket) {
+    console.log("co nguoi ket noi: "+socket.id);
+    socket.on("find_user",async function(data){
+        string="";
+        var temp = data.split(" ")
+        var user =await User.findUser(temp[0],temp[1]);
+        if(user){
+            string=user.displayName;
+        }
+        socket.emit("server_send",string);
     });
 });
 

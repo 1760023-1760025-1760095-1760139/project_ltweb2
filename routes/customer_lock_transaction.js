@@ -61,6 +61,12 @@ router.post('/',asyncHandler(async function (req,res){
         user.transaction_lock_OTP=null;
         user.save();
         await Accept_user.addUser_transaction_lock(user.id,user.displayName,user.bank);
+        if(user.transaction_lock==false){
+            req.session.notification=2;
+        }
+        else{
+            req.session.notification=3;
+        }
         
         return res.redirect('customer');
     }

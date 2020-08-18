@@ -152,8 +152,8 @@ router.post('/',asyncHandler(async function (req,res){
             Ngày đến hẹn:${appointment_date}. `;
         
     await Notification.addNotification(user.id,string,sent_date);
-
-    return res.redirect('/loaded_bill');
+    req.session.notification=5;
+    return res.redirect('/customer');
 }));
 
 module.exports = router;

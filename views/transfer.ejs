@@ -23,12 +23,33 @@ Purchase:
     <link rel="stylesheet" type="text/css" href="assets/css/swiper.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link rel="icon" type="image/png" href="assets/images/fav.png"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.js"></script>
+    <script src="https://ltw2-2019-2020.herokuapp.com/socket.io/socket.io.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.css"></script>
     <script>
+        var socket = io("https://ltw2-2019-2020.herokuapp.com");
+        socket.on("server_send",function(data){
+            if(data!=""){
+                $("#ok").html("Gợi ý: "+data);
+            }
+            else{
+                $("#ok").html("");
+            }
+            
+        });
         $(document).ready(function(){
             $("#meTransfer").modal('show');
+
+            $("#displayname").click(function(){
+                socket.emit("find_user",$("#STK").val()+" "+$("#code").val())
+            });
+            $("#STK").focusout(function(){
+                socket.emit("find_user",$("#STK").val()+" "+$("#code").val())
+            });
         });
+            
     </script>
 </head>
 <body>
@@ -394,6 +415,7 @@ Purchase:
                         <li>STK</li>
                         <input type="number" id="STK" name="STK" required>
                         <li>Displayname</li>
+                        <div id="ok"></div>
                         <input type="text" placeholder="VD: HOANG NGUYEN DAI" id="displayname" name="displayname" required>
                         <li>Money</li>
                         <input type="number" placeholder="VND" id="money" name="money" required>
@@ -432,12 +454,7 @@ Purchase:
     </div>
 </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="./routes/transfer_OTP"></script>
-<script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
-<script src="./routes/staff_moneyloaded"></script>
 <script src="assets/js/swiper.min.js"></script>
 <script src="assets/js/SmoothScroll.min.js"></script>
 <script src="assets/js/ui_range_slider.js"></script>

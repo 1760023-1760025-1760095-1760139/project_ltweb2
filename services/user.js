@@ -9,6 +9,15 @@ class User extends Model {
         return User.findByPk(id);
     }
 
+    static async findUser(id,bank){
+        return User.findOne({
+            where: {
+                id,
+                bank
+            }
+        });
+    } 
+
     static async deleteById(id){
         return User.destroy({
             where:{

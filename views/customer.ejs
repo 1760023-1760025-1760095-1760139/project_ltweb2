@@ -23,6 +23,70 @@ Purchase:
     <link rel="stylesheet" type="text/css" href="assets/css/swiper.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link rel="icon" type="image/png" href="assets/images/fav.png"/>
+    <script src="assets/js/jquery.min.js"></script>
+    <% if(notification==1){ %>
+    <script>
+        $(document).ready(function(){
+            alert("Bạn đã đổi tiền tệ thành công!!!");
+        });
+    </script>
+    <% } %>
+    <% if(notification==2){ %>
+        <script>
+            $(document).ready(function(){
+                alert("Bạn đã gửi yêu cầu khóa giao dịch online thành công. Nhân viên sẽ phản hồi lại cho bạn sau!!!");
+            });
+        </script>
+    <% } %>
+    <% if(notification==3){ %>
+        <script>
+            $(document).ready(function(){
+                alert("Bạn đã gửi yêu cầu mở giao dịch online thành công. Nhân viên sẽ phản hồi lại cho bạn sau!!!");
+            });
+        </script>
+    <% } %>
+    <% if(notification==4){ %>
+        <script>
+            $(document).ready(function(){
+                alert("Bạn đã gửi yêu cầu khóa tài khoản thành công. Nhân viên sẽ phản hồi lại cho bạn sau!!!");
+            });
+        </script>
+    <% } %>
+    <% if(notification==5){ %>
+        <script>
+            $(document).ready(function(){
+                alert("Bạn đã gửi tiền tài khoản tiết kiệm thành công. Nhân viên sẽ phản hồi lại cho bạn sau!!!");
+            });
+        </script>
+    <% } %>
+    <% if(notification==6){ %>
+        <script>
+            $(document).ready(function(){
+                alert("Bạn đã hủy gửi tiền tiết kiệm thành công!!!");
+            });
+        </script>
+    <% } %>
+    <% if(notification==7){ %>
+        <script>
+            $(document).ready(function(){
+                alert("Bạn đã gửi yêu cầu chuyển tiền thành công. Nhân viên sẽ phản hồi lại cho bạn sau!!!");
+            });
+        </script>
+    <% } %>
+    <% if(notification==8){ %>
+        <script>
+            $(document).ready(function(){
+                alert("Bạn đã gửi yêu cầu đổi password thành công. Nhân viên sẽ phản hồi lại cho bạn sau!!!");
+            });
+        </script>
+    <% } %>
+    <% if(notification==9){ %>
+        <script>
+            $(document).ready(function(){
+                alert("Đăng nhập thành công!!!");
+            });
+        </script>
+    <% } %>
 </head>
 <body>
 <div class="me-main-wraper">
@@ -360,9 +424,6 @@ Purchase:
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.js"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script src="./routes/transfer_OTP"></script>
-<script src="./routes/staff_moneyloaded"></script>
-<script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
 <script src="assets/js/swiper.min.js"></script>
 <script src="assets/js/SmoothScroll.min.js"></script>

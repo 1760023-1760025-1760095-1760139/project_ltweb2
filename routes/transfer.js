@@ -13,8 +13,9 @@ const router = new Router();
 
 var errors=[];
 var time_day=0;
-
+var string="";
 router.get('/', asyncHandler(async function (req,res){
+    
     const user= await User.findById(req.session.userId)
     const bank= await Bank.findByAll();
     const bank_user=await Bank.findByCode(user.bank);
@@ -36,7 +37,7 @@ router.get('/', asyncHandler(async function (req,res){
         if(account_saving){
             time_day=await Interest_rate.sum_day(req.session.userId);
         }
-        return res.render('transfer', { errors, bank,bank_user,time_day,account_saving});
+        return res.render('transfer', { errors, bank,bank_user,time_day,account_saving,string});
     }
     else {
         return res.redirect('/');
@@ -61,7 +62,7 @@ router.post('/',asyncHandler(async function (req,res){
     errors = validationResult(req);
     if (!errors.isEmpty()) {
         errors = errors.array();
-        return res.render('transfer', { errors, bank,time_day,account_saving});
+        return res.render('transfer', { errors, bank,time_day,account_saving,string});
     }
     errors = [];
     var today = new Date();
@@ -71,14 +72,14 @@ router.post('/',asyncHandler(async function (req,res){
     //check xem có user của STK đó k nếu có thì có cùng displayname and mã bank k
     if(!user_rec|| (user_rec.displayName!=(req.body.displayname).toUpperCase()) || (user_rec.bank!=req.body.code) || (user_rec.staff!=false)){
         errors = [{ msg: "User information could not be found!!!" }];
-        return res.render('transfer', { errors, bank,time_day,account_saving});
+        return res.render('transfer', { errors, bank,time_day,account_saving,string});
     }
 
     if(req.body.currency=="VND"){
         //đk 1 lần giao dịch dưới 50tr
         if(req.body.money>50000000){
             errors = [{ msg: "Maximum of 1 transfer is 50,000,000 VND!!!" }];
-            return res.render('transfer', { errors, bank,time_day,account_saving});
+            return res.render('transfer', { errors, bank,time_day,account_saving,string});
         }
     
         //check xem acc còn đủ tiền để giao dịch k
@@ -93,7 +94,7 @@ router.post('/',asyncHandler(async function (req,res){
         const x=Number(req.body.money);
         if((acc.money-(x+temp))<0){
             errors = [{ msg: "You do not have enough money to make this transaction!!!" }];
-            return res.render('transfer', { errors, bank,time_day,account_saving});
+            return res.render('transfer', { errors, bank,time_day,account_saving,string});
         }
 
         //dkien 1 ngày giao dịch < 200tr
@@ -102,7 +103,7 @@ router.post('/',asyncHandler(async function (req,res){
         if(check_money_date>200000000){
             await Transfer.deleteById(addSend.id)
             errors = [{ msg: "Maximum of 1 day of transfer is 200,000,000 VND!!!" }];
-            return res.render('transfer', { errors, bank,time_day,account_saving});
+            return res.render('transfer', { errors, bank,time_day,account_saving,string});
         }
 
         //save tax phí lại
@@ -120,7 +121,7 @@ router.post('/',asyncHandler(async function (req,res){
         //đk 1 lần giao dịch dưới 50tr
         if(req.body.money>5000){
             errors = [{ msg: "Maximum of 1 transfer is 5,000 USD!!!" }];
-            return res.render('transfer', { errors, bank,time_day,account_saving});
+            return res.render('transfer', { errors, bank,time_day,account_saving,string});
         }
     
         //check xem acc còn đủ tiền để giao dịch k
@@ -128,7 +129,7 @@ router.post('/',asyncHandler(async function (req,res){
         const x=Number(req.body.money);
         if((acc.money_USD-x)<0){
             errors = [{ msg: "You do not have enough money to make this transaction!!!" }];
-            return res.render('transfer', { errors, bank,time_day,account_saving});
+            return res.render('transfer', { errors, bank,time_day,account_saving,string});
         }
 
         //dkien 1 ngày giao dịch < 200tr
@@ -137,7 +138,7 @@ router.post('/',asyncHandler(async function (req,res){
         if(check_money_date>50000){
             await Transfer.deleteById(addSend.id)
             errors = [{ msg: "Maximum of 1 day of transfer is 20,000 USD!!!" }];
-            return res.render('transfer', { errors, bank,time_day,account_saving});
+            return res.render('transfer', { errors, bank,time_day,account_saving,string});
         }
 
         //gửi OTP qua email

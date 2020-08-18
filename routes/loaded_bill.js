@@ -85,7 +85,7 @@ router.post('/',[
             
     await Notification.addNotification(user.id,string,sent_date);
     await Account_saving.deleteById(user.id);
-
+    req.session.notification=6;
     return res.redirect('/customer');
 }));
 

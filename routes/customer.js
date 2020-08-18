@@ -16,6 +16,11 @@ socket = io(process.env.BASE_URL);
 
 var time_day=0;
 router.get('/',asyncHandler(async function (req,res){
+    var notification=0;
+    if(req.session.notification){
+        notification=req.session.notification;
+        delete req.session.notification;
+    }
     const user= await User.findById(req.session.userId)
     const bank=await Bank.findByCode(user.bank);
     const account_saving=await Account_saving.findBySTK(req.session.userId);
@@ -36,7 +41,7 @@ router.get('/',asyncHandler(async function (req,res){
             time_day=await Interest_rate.sum_day(req.session.userId);
         }
         
-        return res.render('customer',{bank,time_day,account_saving});
+        return res.render('customer',{bank,time_day,account_saving,notification});
     }
     else {
         return res.redirect('/');

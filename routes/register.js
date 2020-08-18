@@ -90,7 +90,7 @@ router.post('/',[
         money_save:0,
     })
     await Accept_user.addUser(user.id,user.displayName,user.bank);
-
-    return res.render('login_not_activated');
+    req.session.notification=1;
+    return res.redirect('/login');
 }));
 module.exports = router;

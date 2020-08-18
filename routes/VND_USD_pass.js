@@ -87,6 +87,7 @@ router.post('/',asyncHandler(async function (req,res){
     await Notification.addNotification(user.id,string,date_name);
 
     delete req.session.money_VND;
+    req.session.notification=1;
     return res.redirect('/customer');
 }));
 

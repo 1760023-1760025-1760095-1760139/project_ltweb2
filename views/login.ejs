@@ -25,13 +25,29 @@ Purchase:
     <link rel="icon" type="image/png" href="assets/images/fav.png"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.css"></script>
-    <script>
-        $(document).ready(function(){
-            $("#meLogin").modal('show');
-        });
-    </script>
+    <% if(notification==0){ %>
+        <script>
+            $(document).ready(function(){
+                $("#meLogin").modal('show');
+            });
+        </script>
+    <% } %>
+    <% if(notification==1){ %>
+        <script>
+            $(document).ready(function(){
+                alert("Bạn đã gửi yêu cầu đăng kí tài khoản thành công. Nhân viên sẽ phản hồi lại cho bạn sau!!!");
+            });
+        </script>
+    <% } %>
+    <% if(notification==2){ %>
+        <script>
+            $(document).ready(function(){
+                alert("Bạn đã đổi password thành công!!!");
+            });
+        </script>
+    <% } %>
 </head>
-<body>
+<body >
 <div class="me-main-wraper">
     <!-- top header -->
     <div class="me-top-header">

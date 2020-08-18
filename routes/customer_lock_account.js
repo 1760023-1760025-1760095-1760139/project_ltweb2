@@ -60,6 +60,7 @@ router.post('/',asyncHandler(async function (req,res){
         user.lock_OTP=null;
         user.save();
         await Accept_user.addUser_account_lock(user.id,user.displayName,user.bank);
+        req.session.notification=4;
         return res.redirect('customer');
     }
     errors = [{ msg: "Invalided OTP code !!!" }];

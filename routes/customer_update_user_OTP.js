@@ -75,6 +75,7 @@ router.post('/',asyncHandler(async function (req,res){
     user.update_OTP=null;
     user.save();
     await Accept_user.addUser_accept_pass(user.id,user.displayName,user.bank);
+    req.session.notification=8;
     return res.redirect('/customer');
 }));
 

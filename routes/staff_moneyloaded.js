@@ -86,6 +86,7 @@ router.post('/',asyncHandler(async function (req,res){
             Số tiền: ${transfer.money} VND.`;
 
         const notification=await Notification.addNotification(user_acc.id,string,date_name);
+        req.session.notification=1;
         return res.redirect('/staff');
     }
     else{
@@ -107,6 +108,7 @@ router.post('/',asyncHandler(async function (req,res){
             Số tiền: ${transfer.money} USD.`;
 
         const notification=await Notification.addNotification(user_acc.id,string,date_name);
+        req.session.notification=1;
         return res.redirect('/staff');
     }
     
