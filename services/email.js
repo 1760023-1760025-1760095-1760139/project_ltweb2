@@ -1,4 +1,7 @@
 const nodemailer=require('nodemailer');
+process.env.ADMIN_EMAIL = 'peace.banking.17ck1@gmail.com';
+process.env.ADMIN_PASSWORD = 'Daoto990611@';
+process.env.BASE_URL = 'http://localhost:3000';
 
 async function send(to_,subject_,content){
     const transporter = nodemailer.createTransport({
@@ -6,14 +9,14 @@ async function send(to_,subject_,content){
         port: 587,
         secure: false,
         auth: {            
-            user: "peace.banking.17ck1@gmail.com", 
-            pass: "Daoto990611@", 
+            user: process.env.ADMIN_EMAIL, 
+            pass: process.env.ADMIN_PASSWORD, 
          
         }
     });
 
     return transporter.sendMail({
-        from: '"web2"<peace.banking.17ck1@gmail.com>',
+        from: `"Internetbanking "<${process.env.ADMIN_EMAIL}>`,
         to: to_,
         subject: subject_,
         text: content,

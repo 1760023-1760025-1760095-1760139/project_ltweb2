@@ -4,17 +4,20 @@ const { body, validationResult } = require('express-validator');
 const User=require('../services/user');
 const Bank = require('../services/bank');
 const Notification=require('../services/notification');
+const Accept_user = require('../services/accept_user');
 const Email=require('../services/email');
 const router = new Router();
-
+ 
 var errors=[];
+var count=0; 
 router.get('/',asyncHandler(async function (req,res){
     const user= await User.findById(req.session.id);
     const bank=await Bank.findByCode(user.bank)
     const user_staff= await User.findById(req.session.userId);
     if(req.session.userId){
         if(user_staff.staff==true){
-            return res.render('staff_update',{errors,bank,user});
+            count= await Accept_user.Count(user.id,user.bank);
+            return res.render('staff_update',{errors,bank,user,count});
         }
         return res.redirect('/customer');
     }
@@ -40,6 +43,7 @@ router.post('/',[
     var user= await User.findById(req.session.id);
     const bank=await Bank.findByCode(user.bank)
     errors = validationResult(req);
+    count= await Accept_user.Count(user.id,user.bank);
     if (!errors.isEmpty()) {
         errors = errors.array();
         return res.render('staff_update', {errors,bank,user});
@@ -50,7 +54,7 @@ router.post('/',[
         const found=await User.findByEmail(req.body.email);
         if(found){
             errors = [{ msg: "Email already exists!!!" }];
-            return res.render('staff_update', { errors,bank ,user});
+            return res.render('staff_update', { errors,bank ,user,count});
         }
         user.email=req.body.email;
         user.save();

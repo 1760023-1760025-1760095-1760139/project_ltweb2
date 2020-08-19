@@ -58,7 +58,7 @@ router.post('/',[
         return res.render('login_not_activated');
     }
     if(user.authentication!=null){
-        req.session.id=user.id;
+        req.session.id=user.id; 
         return res.redirect('/login_authentication');
     }
     if(user.authentication_check==true){
@@ -66,6 +66,7 @@ router.post('/',[
     }
     req.session.userId=user.id;
     if(user.staff==true){
+        req.session.notification=2;
         return res.redirect('/staff');
     }
     req.session.notification=9;

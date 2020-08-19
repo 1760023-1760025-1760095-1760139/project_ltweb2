@@ -36,6 +36,17 @@ class Accept_user extends Model {
         });
     };
 
+    static async Count(STK,bank_acc){
+        var dem=0;
+        Accept_user.findAll({
+            where:{
+                STK,
+                bank_acc,
+            }
+        }).then(temp => {dem=dem+1;});
+        return dem;
+    };
+
     static async deleteById(id){
         return Accept_user.destroy({
             where:{

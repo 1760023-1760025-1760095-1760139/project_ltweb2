@@ -6,16 +6,13 @@ const Bank=require('../services/bank');
 const Account=require('../services/account');
 const Transfer=require('../services/transfer');
 const Notification=require('../services/notification');
+const Accept_user = require('../services/accept_user');
 const Email=require('../services/email');
 const router = new Router();
 
-const io = require('socket.io-client');
-process.env.BASE_URL = "http://localhost:3000";
-let socket;
-socket = io(process.env.BASE_URL);
-
 var errors=[];
 var i=1;
+var count=0;
 router.get('/',asyncHandler(async function (req,res){
     i=1;
     var staff=false;
@@ -25,7 +22,8 @@ router.get('/',asyncHandler(async function (req,res){
     const bank= await Bank.findByAll();
     if(req.session.userId){
         if(user.staff==true){
-            return res.render('staff_moneyloaded',{errors,arr,i,bank,bank_acc});
+            count= await Accept_user.Count(user.id,user.bank);
+            return res.render('staff_moneyloaded',{errors,arr,i,bank,bank_acc,count});
         }
         return res.redirect('/customer');
     }
@@ -41,17 +39,18 @@ router.post('/',asyncHandler(async function (req,res){
     const arr= await User.findByAll_STK_Bank(user.bank,staff)
     const bank_acc=await Bank.findByCode(user.bank)
     const bank= await Bank.findByAll();
+    count= await Accept_user.Count(user.id,user.bank);
     errors = validationResult(req);
     if (!errors.isEmpty()) {
         errors = errors.array();
-        return res.render('staff_moneyloaded', { errors, arr, i, bank,bank_acc});
+        return res.render('staff_moneyloaded', { errors, arr, i, bank,bank_acc,count});
     }
     errors = [];
     i=1;
     const user_rec=await User.findById(req.body.STK);
     if(!user_rec|| (user_rec.displayName!=(req.body.displayname).toUpperCase()) || (user_rec.bank!=req.body.code) || (user_rec.staff!=false)){
         errors = [{ msg: "User information could not be found!!!" }];
-        return res.render('staff_moneyloaded', { errors, arr, i, bank,bank_acc});
+        return res.render('staff_moneyloaded', { errors, arr, i, bank,bank_acc,count});
     } 
     var today = new Date();
     var date= today.toISOString();

@@ -48,6 +48,9 @@ Purchase:
             $("#STK").focusout(function(){
                 socket.emit("find_user",$("#STK").val()+" "+$("#code").val())
             });
+            $("#code").focusout(function(){
+                socket.emit("find_user",$("#STK").val()+" "+$("#code").val())
+            });
         });
             
     </script>

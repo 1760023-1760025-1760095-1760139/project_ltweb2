@@ -50,12 +50,12 @@ router.post('/',asyncHandler(async function (req,res){
     const user_rec= await User.findById(req.body.STK);
     const bank_user=await Bank.findByCode(user_acc.bank);
     const account_saving=await Account_saving.findBySTK(req.session.userId);
-    if(user_acc.authentication!=null){
+    if(user.authentication!=null){
         req.session.id=req.session.userId;
         delete req.session.userId;
         return res.redirect('/login_authentication');
     }
-    if(user_acc.lock==true){
+    if(user.lock==true){
         delete req.session.userId;
         return res.redirect('login_locked_account');
     }
