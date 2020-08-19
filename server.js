@@ -99,10 +99,29 @@ io.on('connection', function(socket) {
     console.log("co nguoi ket noi: "+socket.id);
     socket.on("find_user",async function(data){
         string="";
+        console.log(data)
+        console.log(data)
+        console.log(data)
+        console.log(data)
+        console.log(data)
         var temp = data.split(" ")
+        console.log(temp[0])
+        console.log(temp[0])
+        console.log(temp[0])
+        console.log(temp[0])
+        console.log(temp[1])
+        console.log(temp[1])
+        console.log(temp[1])
+        console.log(temp[1])
+        console.log(temp[1])
         var user =await User.findUser(temp[0],temp[1]);
         if(user){
             string=user.displayName;
+            console.log(string)
+            console.log(string)
+            console.log(string)
+            console.log(string)
+            console.log(string)
         }
         socket.emit("server_send",string);
     });
