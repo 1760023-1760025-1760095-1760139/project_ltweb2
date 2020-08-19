@@ -16,7 +16,8 @@ router.get('/',asyncHandler(async function (req,res){
     const user_staff= await User.findById(req.session.userId);
     if(req.session.userId){
         if(user_staff.staff==true){
-            count= await Accept_user.Count(user.id,user.bank);
+            const arr_count= await Accept_user.findByAll_STK(user.bank)
+            arr_count.forEach(x=>{count=count+1;});
             return res.render('staff_update',{errors,bank,user,count});
         }
         return res.redirect('/customer');
@@ -43,7 +44,8 @@ router.post('/',[
     var user= await User.findById(req.session.id);
     const bank=await Bank.findByCode(user.bank)
     errors = validationResult(req);
-    count= await Accept_user.Count(user.id,user.bank);
+    const arr_count= await Accept_user.findByAll_STK(user.bank)
+    arr_count.forEach(x=>{count=count+1;});
     if (!errors.isEmpty()) {
         errors = errors.array();
         return res.render('staff_update', {errors,bank,user});

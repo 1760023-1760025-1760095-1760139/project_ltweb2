@@ -3,7 +3,6 @@ const asyncHandler=require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 const User=require('../services/user');
 const Bank = require('../services/bank');
-const Accept_user = require('../services/accept_user');
 const router = new Router();
 
 var errors=[];
@@ -23,7 +22,7 @@ router.get('/',asyncHandler(async function (req,res){
     const bank_acc=await Bank.findByCode(user.bank)
     if(req.session.userId){
         if(user.staff==true){
-            count= await Accept_user.Count(user.id,user.bank);
+            arr.forEach(x=>{count=count+1;});
             return res.render('staff',{errors,arr,i,bank_acc,notification,count});
         }
         return res.redirect('/customer');
@@ -40,7 +39,7 @@ router.post('/',asyncHandler(async function (req,res){
     const user= await User.findById(req.session.userId)
     var arr= await User.findByAll_STK_Bank(user.bank,staff)
     const bank_acc=await Bank.findByCode(user.bank)
-    count= await Accept_user.Count(user.id,user.bank);
+    arr.forEach(x=>{count=count+1;});
     errors = validationResult(req);
     if (!errors.isEmpty()) {
         errors = errors.array();

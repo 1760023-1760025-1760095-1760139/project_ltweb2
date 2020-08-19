@@ -18,7 +18,8 @@ router.get('/',asyncHandler(async function (req,res){
     const user_staff= await User.findById(req.session.userId);
     if(req.session.userId){
         if(user_staff.staff==true){
-            count= await Accept_user.Count(user.id,user.bank);
+            const arr_count= await Accept_user.findByAll_STK(user.bank)
+            arr_count.forEach(x=>{count=count+1;});
             return res.render('staff_information',{errors,bank,arr,i,count});
         }
         return res.redirect('/customer');
@@ -36,7 +37,8 @@ router.post('/',[
     const bank=await Bank.findByCode(user.bank)
     var arr= await Notification.findByIdAll(user.id);
     var i=1; 
-    count= await Accept_user.Count(user.id,user.bank);
+    const arr_count= await Accept_user.findByAll_STK(user.bank)
+    arr_count.forEach(x=>{count=count+1;});
     errors = validationResult(req);
     if (!errors.isEmpty()) {
         errors = errors.array();

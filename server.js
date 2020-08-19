@@ -40,8 +40,6 @@ app.use('/forgot',require('./routes/forgot'));
 app.use('/forgot_OTP',require('./routes/forgot_OTP'));
 app.use('/forgot_password',require('./routes/forgot_password'));
 
-app.use('/test',require('./routes/test'));
-
 app.use('/customer',require('./routes/customer'));
 app.use('/customer_update_user',require('./routes/customer_update_user'));
 app.use('/customer_update_user_OTP',require('./routes/customer_update_user_OTP'));
