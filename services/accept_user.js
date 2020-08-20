@@ -36,16 +36,6 @@ class Accept_user extends Model {
         });
     };
 
-    static async Count(bank_acc){
-        var dem=0;
-        await Accept_user.findAll({
-            where:{
-                bank_acc,
-            }
-        }).then(temp => {dem=dem+1;});
-        return dem;
-    };
-
     static async deleteById(id){
         return Accept_user.destroy({
             where:{
