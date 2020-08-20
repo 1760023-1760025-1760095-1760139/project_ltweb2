@@ -12,7 +12,6 @@ const router = new Router();
 
 var errors=[];
 var i=1;
-var count=0;
 router.get('/',asyncHandler(async function (req,res){
     i=1;
     var staff=false;
@@ -22,8 +21,11 @@ router.get('/',asyncHandler(async function (req,res){
     const bank= await Bank.findByAll();
     if(req.session.userId){
         if(user.staff==true){
-            const arr_count= await Accept_user.findByAll_STK(user.bank)
-            arr_count.forEach(x=>{count=count+1;});
+            var count=0;
+            const arr_= await Accept_user.findByAll_STK(user.bank)
+            if(arr_){
+                arr_.forEach(x=>{count=count+1;});
+            }
             return res.render('staff_moneyloaded',{errors,arr,i,bank,bank_acc,count});
         }
         return res.redirect('/customer');
@@ -40,8 +42,11 @@ router.post('/',asyncHandler(async function (req,res){
     const arr= await User.findByAll_STK_Bank(user.bank,staff)
     const bank_acc=await Bank.findByCode(user.bank)
     const bank= await Bank.findByAll();
-    const arr_count= await Accept_user.findByAll_STK(user.bank)
-    arr_count.forEach(x=>{count=count+1;});
+    var count=0;
+    const arr_= await Accept_user.findByAll_STK(user.bank)
+    if(arr_){
+        arr_.forEach(x=>{count=count+1;});
+    }
     errors = validationResult(req);
     if (!errors.isEmpty()) {
         errors = errors.array();

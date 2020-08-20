@@ -36,11 +36,10 @@ class Accept_user extends Model {
         });
     };
 
-    static async Count(STK,bank_acc){
+    static async Count(bank_acc){
         var dem=0;
-        Accept_user.findAll({
+        await Accept_user.findAll({
             where:{
-                STK,
                 bank_acc,
             }
         }).then(temp => {dem=dem+1;});

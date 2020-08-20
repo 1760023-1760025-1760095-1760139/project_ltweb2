@@ -52,10 +52,13 @@ router.post('/',[
         return res.render('login', { errors ,notification});
     }
     if(user.lock==true){
-        return res.render('login_locked_account');
+        return res.redirect('/login_locked_account');
     }
     if(user.OTP!=null){
-        return res.render('login_not_activated');
+        return res.redirect('/login_not_activated');
+    }
+    if(user.authentication=='A'){
+        return res.redirect('/');
     }
     if(user.authentication!=null){
         req.session.id=user.id; 
