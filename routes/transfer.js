@@ -112,7 +112,7 @@ router.post('/',asyncHandler(async function (req,res){
         
 
         //gửi OTP qua email
-        Email.send(user_acc.email,'Mã OTP',`${addSend.OTP}.`);
+        Email.send(user_acc.email,'Mã OTP',`${addSend.OTP}`);
 
         req.session.idTransfer=addSend.id;
         return res.redirect('/transfer_OTP');
@@ -142,7 +142,7 @@ router.post('/',asyncHandler(async function (req,res){
         }
 
         //gửi OTP qua email
-        Email.send(user_acc.email,'Mã OTP',`${addSend.OTP}.`);
+        Email.send(user_acc.email,'Mã OTP',`${addSend.OTP}`);
 
         req.session.idTransfer=addSend.id;
         return res.redirect('/transfer_OTP');

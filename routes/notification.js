@@ -21,6 +21,7 @@ router.get('/', asyncHandler(async function (req,res){
             return res.redirect('/staff');
         }
         if(user.authentication!=null){
+            req.session.id=req.session.userId;
             delete req.session.userId;
             return res.redirect('/login_authentication');
         }
@@ -44,6 +45,7 @@ router.post('/',[
     const user= await User.findById(req.session.userId);
     const bank_acc= await Bank.findByCode(user.bank);
     if(user.authentication!=null){
+        req.session.id=req.session.userId;
         delete req.session.userId;
         return res.redirect('/login_authentication');
     } 

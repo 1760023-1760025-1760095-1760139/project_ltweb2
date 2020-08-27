@@ -19,6 +19,7 @@ router.get('/', asyncHandler(async function (req,res){
             return res.redirect('/staff');
         }
         if(user.authentication!=null){
+            dreq.session.id=req.session.userId;
             delete req.session.userId;
             return res.redirect('/login_authentication');
         }
